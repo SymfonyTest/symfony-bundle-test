@@ -10,8 +10,6 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
- *
- *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 class AppKernel extends Kernel
@@ -57,7 +55,6 @@ class AppKernel extends Kernel
         $this->configFiles[] = $configFile;
     }
 
-
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
         $this->configFiles = array_unique($this->configFiles);
@@ -77,7 +74,7 @@ class AppKernel extends Kernel
     }
 
     /**
-     * Load routes
+     * Load routes.
      *
      * @param RouteCollectionBuilder $routes
      */

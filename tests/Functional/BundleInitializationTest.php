@@ -6,8 +6,6 @@ use Nyholm\BundleTest\BaseBundleTestCase;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 
 /**
- *
- *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 class BundleInitializationTest extends BaseBundleTestCase
