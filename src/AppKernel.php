@@ -14,8 +14,6 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
  */
 class AppKernel extends Kernel
 {
-    use MicroKernelTrait;
-
     /**
      * @var string[]
      */
@@ -31,6 +29,9 @@ class AppKernel extends Kernel
      */
     private $cachePrefix = '';
 
+    /**
+     * @param string $cachePrefix
+     */
     public function __construct($cachePrefix)
     {
         parent::__construct('test', true);
@@ -55,14 +56,6 @@ class AppKernel extends Kernel
         $this->configFiles[] = $configFile;
     }
 
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
-    {
-        $this->configFiles = array_unique($this->configFiles);
-        foreach ($this->configFiles as $path) {
-            $loader->load($path);
-        }
-    }
-
     public function getCacheDir()
     {
         return sys_get_temp_dir().'/NyholmBundleTest/'.$this->cachePrefix;
@@ -71,16 +64,6 @@ class AppKernel extends Kernel
     public function getLogDir()
     {
         return sys_get_temp_dir().'/NyholmBundleTest/log';
-    }
-
-    /**
-     * Load routes.
-     *
-     * @param RouteCollectionBuilder $routes
-     */
-    protected function configureRoutes(RouteCollectionBuilder $routes)
-    {
-        $routes->import(__DIR__.'/config/routing.yml');
     }
 
     public function registerBundles()
@@ -92,5 +75,40 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
+    }
+
+    /**
+     * (From MicroKernelTrait)
+     * {@inheritdoc}
+     */
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+        $loader->load(function (ContainerBuilder $container) use ($loader) {
+            $container->loadFromExtension('framework', array(
+                'router' => array(
+                    'resource' => 'kernel:loadRoutes',
+                    'type' => 'service',
+                ),
+            ));
+
+            $this->configFiles = array_unique($this->configFiles);
+            foreach ($this->configFiles as $path) {
+                $loader->load($path);
+            }
+
+            $container->addObjectResource($this);
+        });
+    }
+
+    /**
+     * (From MicroKernelTrait)
+     * @internal
+     */
+    public function loadRoutes(LoaderInterface $loader)
+    {
+        $routes = new RouteCollectionBuilder($loader);
+        $routes->import(__DIR__.'/config/routing.yml');
+
+        return $routes->build();
     }
 }
