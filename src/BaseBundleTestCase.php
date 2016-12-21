@@ -3,6 +3,7 @@
 namespace Nyholm\BundleTest;
 
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  *
@@ -30,6 +31,10 @@ abstract class BaseBundleTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->ensureKernelShutdown();
 
+        if (null === $this->kernel) {
+            $this->createKernel();
+        }
+
         $this->kernel->boot();
     }
 
@@ -48,6 +53,10 @@ abstract class BaseBundleTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function createKernel()
     {
+        if (!class_exists(Kernel::class)) {
+            throw new \LogicException('You must install symfony/symfony to run the bundle test.');
+        }
+
         require_once __DIR__.'/AppKernel.php';
         $class = 'Nyholm\BundleTest\AppKernel';
 

@@ -38,7 +38,7 @@ class AppKernel extends Kernel
         parent::__construct('test', true);
         $this->cachePrefix = $cachePrefix;
         $this->addBundle(FrameworkBundle::class);
-        $this->addConfigFile(__DIR__.'/config/framwork.yml');
+        $this->addConfigFile(__DIR__.'/config/framework.yml');
     }
 
     /**
@@ -60,7 +60,7 @@ class AppKernel extends Kernel
 
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
-        array_unique($this->configFiles);
+        $this->configFiles = array_unique($this->configFiles);
         foreach ($this->configFiles as $path) {
             $loader->load($path);
         }
@@ -71,6 +71,11 @@ class AppKernel extends Kernel
         return sys_get_temp_dir().'/NyholmBundleTest/'.$this->cachePrefix;
     }
 
+    public function getLogDir()
+    {
+        return sys_get_temp_dir().'/NyholmBundleTest/log';
+    }
+
     /**
      * Load routes
      *
@@ -78,15 +83,15 @@ class AppKernel extends Kernel
      */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
-        $routes->import('config/routing.yml');
+        $routes->import(__DIR__.'/config/routing.yml');
     }
 
     public function registerBundles()
     {
-        array_unique($this->bundlesToRegister);
+        $this->bundlesToRegister = array_unique($this->bundlesToRegister);
         $bundles = [];
         foreach ($this->bundlesToRegister as $bundle) {
-            $bundles = new $bundle();
+            $bundles[] = new $bundle();
         }
 
         return $bundles;
