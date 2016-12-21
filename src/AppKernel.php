@@ -84,12 +84,12 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function (ContainerBuilder $container) use ($loader) {
-            $container->loadFromExtension('framework', array(
-                'router' => array(
+            $container->loadFromExtension('framework', [
+                'router' => [
                     'resource' => 'kernel:loadRoutes',
                     'type' => 'service',
-                ),
-            ));
+                ],
+            ]);
 
             $this->configFiles = array_unique($this->configFiles);
             foreach ($this->configFiles as $path) {
@@ -101,7 +101,8 @@ class AppKernel extends Kernel
     }
 
     /**
-     * (From MicroKernelTrait)
+     * (From MicroKernelTrait).
+     *
      * @internal
      */
     public function loadRoutes(LoaderInterface $loader)
