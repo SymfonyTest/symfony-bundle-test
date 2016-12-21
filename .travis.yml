@@ -17,8 +17,6 @@ env:
     - TEST_COMMAND="composer test"
   matrix:
     - SYMFONY_VERSION=3.2.*
-    - SYMFONY_VERSION=2.8.*
-    - SYMFONY_VERSION=2.7.*
     - SYMFONY_VERSION=2.3.*
 
 matrix:
