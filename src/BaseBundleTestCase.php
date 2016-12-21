@@ -6,8 +6,6 @@ use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- *
- *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 abstract class BaseBundleTestCase extends \PHPUnit_Framework_TestCase
@@ -20,7 +18,7 @@ abstract class BaseBundleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return string
      */
-    protected abstract function getBundleClass();
+    abstract protected function getBundleClass();
 
     /**
      * Boots the Kernel for this test.
@@ -47,7 +45,7 @@ abstract class BaseBundleTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get a kernel which you may configure with your bundle and services
+     * Get a kernel which you may configure with your bundle and services.
      *
      * @return AppKernel
      */
