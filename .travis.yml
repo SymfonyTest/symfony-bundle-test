@@ -9,7 +9,7 @@ branches:
     - /^patch-.*$/
 
 php:
-    - 5.4
+    - 5.5
     - 7.1
     - hhvm
 env:
@@ -24,7 +24,7 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 5.4
+    - php: 5.5
       env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" COVERAGE=true TEST_COMMAND="composer test-ci" SYMFONY_VERSION=2.3.*
 
 install:
