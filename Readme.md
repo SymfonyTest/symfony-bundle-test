@@ -43,7 +43,7 @@ class BundleInitializationTest extends BaseBundleTestCase
         // Boot the kernel.
         $this->bootKernel();
         
-        // Get the containter
+        // Get the container
         $container = $this->getContainer();
 
         // Test if you services exists
