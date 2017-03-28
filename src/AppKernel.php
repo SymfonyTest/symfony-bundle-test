@@ -3,7 +3,6 @@
 namespace Nyholm\BundleTest;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
@@ -34,7 +33,7 @@ class AppKernel extends Kernel
      */
     public function __construct($cachePrefix)
     {
-        parent::__construct('test', true);
+        parent::__construct($cachePrefix, true);
         $this->cachePrefix = $cachePrefix;
         $this->addBundle(FrameworkBundle::class);
         $this->addConfigFile(__DIR__.'/config/framework.yml');
