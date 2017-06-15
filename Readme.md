@@ -1,7 +1,7 @@
 # Symfony Bundle Test
 
 [![Latest Version](https://img.shields.io/github/release/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://github.com/Nyholm/symfony-bundle-test/releases)
-[![Build Status](https://img.shields.io/travis/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://travis-ci.org/Nyholm/symfony-bundle-test)
+[![Build Status](https://img.shields.io/travis/Nyholm/symfony-bundle-test/master.svg?style=flat-square)](https://travis-ci.org/Nyholm/symfony-bundle-test)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://scrutinizer-ci.com/g/Nyholm/symfony-bundle-test)
 [![Quality Score](https://img.shields.io/scrutinizer/g/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://scrutinizer-ci.com/g/Nyholm/symfony-bundle-test)
 [![Total Downloads](https://img.shields.io/packagist/dt/nyholm/symfony-bundle-test.svg?style=flat-square)](https://packagist.org/packages/nyholm/symfony-bundle-test)
