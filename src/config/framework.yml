@@ -7,3 +7,5 @@ framework:
     csrf_protection: false
     validation:
         enabled: false
+    annotations:
+        cache: none
