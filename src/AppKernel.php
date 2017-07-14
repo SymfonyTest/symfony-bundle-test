@@ -29,6 +29,11 @@ class AppKernel extends Kernel
     private $cachePrefix = '';
 
     /**
+     * @var string|null;
+     */
+    private $fakedProjectDir;
+
+    /**
      * @param string $cachePrefix
      */
     public function __construct($cachePrefix)
@@ -63,6 +68,31 @@ class AppKernel extends Kernel
     public function getLogDir()
     {
         return sys_get_temp_dir().'/NyholmBundleTest/log';
+    }
+
+    public function getProjectDir()
+    {
+        if (null === $this->fakedProjectDir) {
+            return realpath(__DIR__.'/../../../../');
+        }
+
+        return $this->fakedProjectDir;
+    }
+
+    /**
+     * @param string|null $rootDir
+     */
+    public function setRootDir($rootDir)
+    {
+        $this->rootDir = $rootDir;
+    }
+
+    /**
+     * @param string|null $projectDir
+     */
+    public function setProjectDir($projectDir)
+    {
+        $this->fakedProjectDir = $projectDir;
     }
 
     public function registerBundles()
