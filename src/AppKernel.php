@@ -80,15 +80,15 @@ class AppKernel extends Kernel
     }
 
     /**
-     * @param string $rootDir
+     * @param string|null $rootDir
      */
-    public function setRootDir(string $rootDir)
+    public function setRootDir($rootDir)
     {
         $this->rootDir = $rootDir;
     }
 
     /**
-     * @param null|string $projectDir
+     * @param string|null $projectDir
      */
     public function setProjectDir($projectDir)
     {
