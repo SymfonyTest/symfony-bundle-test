@@ -2,13 +2,14 @@
 
 namespace Nyholm\BundleTest;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-abstract class BaseBundleTestCase extends \PHPUnit_Framework_TestCase
+abstract class BaseBundleTestCase extends TestCase
 {
     /**
      * @var AppKernel
