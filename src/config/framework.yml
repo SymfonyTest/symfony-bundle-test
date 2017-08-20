@@ -8,4 +8,5 @@ framework:
     validation:
         enabled: false
     annotations:
+        enabled: false
         cache: none
