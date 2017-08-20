@@ -2,6 +2,12 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release. 
 
+## 1.2.2
+
+### Changed
+
+- Only disable annotations if they are not installed. 
+
 ## 1.2.1
 
 ### Fixed
