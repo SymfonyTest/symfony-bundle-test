@@ -2,6 +2,18 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release. 
 
+## 1.2.1
+
+### Fixed
+
+- Better fix for annotation issue with Symfony 3.3.
+
+## 1.2.0
+
+### Added
+
+- Allow tests with PHPUnit6
+
 ## 1.1.0
 
 ### Added

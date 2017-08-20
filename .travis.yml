@@ -1,5 +1,5 @@
 language: php
-dist: trusty
+dist: precise
 
 cache:
   directories:
@@ -12,7 +12,7 @@ branches:
 php:
     - 5.5
     - 7.1
-    - hhvm
+
 env:
   global:
     - TEST_COMMAND="composer test"
@@ -25,6 +25,11 @@ matrix:
   include:
     - php: 5.5
       env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" COVERAGE=true TEST_COMMAND="composer test-ci" SYMFONY_VERSION=2.3.*
+    - php: hhvm
+      env: SYMFONY_VERSION=2.7.*
+      dist: trusty
+    - php: 7.0
+      env: SYMFONY_VERSION=2.8.*
     - php: 7.1
       env: SYMFONY_VERSION=4.0.*
 

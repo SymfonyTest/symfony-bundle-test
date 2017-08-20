@@ -1,3 +1,6 @@
+imports:
+    - { resource: parameters.php }
+
 framework:
     secret: test
     test: ~
@@ -8,5 +11,4 @@ framework:
     validation:
         enabled: false
     annotations:
-        enabled: false
         cache: none
