@@ -18,13 +18,13 @@ env:
     - TEST_COMMAND="composer test"
   matrix:
     - SYMFONY_VERSION=3.3.*
-    - SYMFONY_VERSION=2.3.*
+    - SYMFONY_VERSION=2.7.*
 
 matrix:
   fast_finish: true
   include:
     - php: 5.5
-      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" COVERAGE=true TEST_COMMAND="composer test-ci" SYMFONY_VERSION=2.3.*
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" COVERAGE=true TEST_COMMAND="composer test-ci" SYMFONY_VERSION=2.7.*
     - php: 7.1
       env: SYMFONY_VERSION=4.0.*
 
