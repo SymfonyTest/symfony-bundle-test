@@ -20,7 +20,7 @@ will give you a good base for testing a Symfony bundle.
 Via Composer
 
 ``` bash
-$ composer require nyholm/symfony-bundle-test
+$ composer require --dev nyholm/symfony-bundle-test
 ```
 
 ## Write a test
