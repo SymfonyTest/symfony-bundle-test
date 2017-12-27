@@ -72,24 +72,24 @@ class BundleInitializationTest extends BaseBundleTestCase
 
 ```
 
-## Configure travis
+## Configure Travis
 
-You want travis to run the highest version of Symfony you support and the lowest
-version. Same with PHP version. There is no need for testing for version in between
-because both Symfony and PHP follow Semver. 
+You want Travis to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html). 
 
 ```yaml
 language: php
 
 php:
     - 5.5
+    - 5.6
+    - 7.0
     - 7.1
-    - hhvm
 env:
   global:
     - TEST_COMMAND="vendor/bin/phpunit"
   matrix:
-    - SYMFONY_VERSION=3.2.*    
+    - SYMFONY_VERSION=4.*    
+    - SYMFONY_VERSION=3.4.*    
     - SYMFONY_VERSION=2.7.*
 
 matrix:
