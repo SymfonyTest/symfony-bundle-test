@@ -5,4 +5,8 @@ if (\Symfony\Component\HttpKernel\Kernel::VERSION_ID >= 30300 && !class_exists('
     $container->loadFromExtension('framework', [
         'annotations' => ['enabled' => false],
     ]);
+} else {
+    $container->loadFromExtension('framework', [
+        'annotations' => ['cache' => 'none'],
+    ]);
 }
