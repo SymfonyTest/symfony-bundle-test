@@ -162,7 +162,6 @@ class AppKernel extends Kernel
         return $container;
     }
 
-
     /**
      * @param CompilerPassInterface[] $compilerPasses
      */
