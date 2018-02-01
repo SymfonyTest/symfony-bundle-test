@@ -24,7 +24,11 @@ class PublicServicePass implements CompilerPassInterface
         $this->regex = $regex;
     }
 
-    public function process(ContainerBuilder $container) {
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function process(ContainerBuilder $container)
+    {
         foreach ($container->getDefinitions() as $id => $definition) {
             if (preg_match($this->regex, $id)) {
                 $definition->setPublic(true);
