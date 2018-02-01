@@ -4,6 +4,7 @@ namespace Nyholm\BundleTest;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
@@ -32,6 +33,11 @@ class AppKernel extends Kernel
      * @var string|null;
      */
     private $fakedProjectDir;
+
+    /**
+     * @var CompilerPassInterface[]
+     */
+    private $compilerPasses = [];
 
     /**
      * @param string $cachePrefix
@@ -140,5 +146,28 @@ class AppKernel extends Kernel
         $routes->import(__DIR__.'/config/routing.yml');
 
         return $routes->build();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function buildContainer()
+    {
+        $container = parent::buildContainer();
+
+        foreach ($this->compilerPasses as $pass) {
+            $container->addCompilerPass($pass);
+        }
+
+        return $container;
+    }
+
+
+    /**
+     * @param CompilerPassInterface[] $compilerPasses
+     */
+    public function addCompilerPasses(array $compilerPasses)
+    {
+        $this->compilerPasses = $compilerPasses;
     }
 }
