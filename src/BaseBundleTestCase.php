@@ -3,6 +3,7 @@
 namespace Nyholm\BundleTest;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -15,6 +16,11 @@ abstract class BaseBundleTestCase extends TestCase
      * @var AppKernel
      */
     private $kernel;
+
+    /**
+     * @var CompilerPassInterface[]
+     */
+    private $compilerPasses = [];
 
     /**
      * @return string
@@ -61,6 +67,7 @@ abstract class BaseBundleTestCase extends TestCase
 
         $this->kernel = new $class(uniqid('cache'));
         $this->kernel->addBundle($this->getBundleClass());
+        $this->kernel->addCompilerPasses($this->compilerPasses);
 
         return $this->kernel;
     }
@@ -85,5 +92,13 @@ abstract class BaseBundleTestCase extends TestCase
     protected function tearDown()
     {
         $this->ensureKernelShutdown();
+    }
+
+    /**
+     * @param CompilerPassInterface $compilerPass
+     */
+    protected function addCompilerPass(CompilerPassInterface $compilerPass)
+    {
+        $this->compilerPasses[] = $compilerPass;
     }
 }
