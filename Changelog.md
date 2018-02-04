@@ -2,9 +2,15 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release. 
 
-## 1.3.0
+## 1.3.1
 
 ### Fixed
+
+- Show our dependencies directly in require secion of composer.json.
+
+## 1.3.0
+
+### Added
 
 - Adding compiler pass support.
 - Adding support for making services public.
