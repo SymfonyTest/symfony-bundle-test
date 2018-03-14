@@ -161,3 +161,6 @@ script:
 
 ```
 
+## Known Issue
+
+Since this makes all seervices public, as a consequence errors like accessing private services in your code will not be caught in the tests.
