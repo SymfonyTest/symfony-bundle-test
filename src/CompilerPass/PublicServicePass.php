@@ -35,5 +35,11 @@ class PublicServicePass implements CompilerPassInterface
                 $definition->setPublic(true);
             }
         }
+
+        foreach ($container->getAliases() as $id => $alias) {
+            if (preg_match($this->regex, $id)) {
+                $alias->setPublic(true);
+            }
+        }
     }
 }
