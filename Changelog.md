@@ -2,11 +2,17 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release. 
 
+## 1.4.0
+
+### Added
+
+- Aliases can be made public with the `PublicServicePass`.
+
 ## 1.3.1
 
 ### Fixed
 
-- Show our dependencies directly in require secion of composer.json.
+- Show our dependencies directly in require section of composer.json.
 
 ## 1.3.0
 
