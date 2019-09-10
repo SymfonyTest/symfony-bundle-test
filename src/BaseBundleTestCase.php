@@ -74,8 +74,10 @@ abstract class BaseBundleTestCase extends TestCase
 
     /**
      * Shuts the kernel down if it was used in the test.
+     *
+     * @after
      */
-    private function ensureKernelShutdown()
+    public function ensureKernelShutdown()
     {
         if (null !== $this->kernel) {
             $container = $this->kernel->getContainer();
@@ -84,14 +86,6 @@ abstract class BaseBundleTestCase extends TestCase
                 $container->reset();
             }
         }
-    }
-
-    /**
-     * Clean up Kernel usage in this test.
-     */
-    protected function tearDown()
-    {
-        $this->ensureKernelShutdown();
     }
 
     /**
