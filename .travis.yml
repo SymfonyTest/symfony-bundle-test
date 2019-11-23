@@ -22,6 +22,7 @@ matrix:
         - php: 7.2
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
         - php: 5.5
+          dist: precise
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
 
         - php: 7.1
@@ -29,12 +30,12 @@ matrix:
 
           # Test the latest stable release
         - php: 5.5
+          dist: precise
         - php: 5.6
+          dist: precise
         - php: 7.0
         - php: 7.2
           dist: trusty
-        - php: 7.1
-          env: DEPENDENCIES="dunglas/symfony-lock:^2"
         - php: 7.1
           env: DEPENDENCIES="dunglas/symfony-lock:^3"
         - php: 7.1
