@@ -80,7 +80,11 @@ abstract class BaseBundleTestCase extends TestCase
     public function ensureKernelShutdown()
     {
         if (null !== $this->kernel) {
-            $container = $this->kernel->getContainer();
+            try {
+                $container = $this->kernel->getContainer();
+            } catch (\LogicException $e) {
+                $container = null;
+            }
             $this->kernel->shutdown();
             if ($container instanceof ResettableContainerInterface) {
                 $container->reset();
