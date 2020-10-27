@@ -70,4 +70,4 @@ jobs:
         if: matrix.coverage && matrix.dependency == ''
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --repository Nyholm/symfony-bundle-test --format=php-clover build/coverage.xml
+          php ocular.phar code-coverage:upload --repository g/Nyholm/symfony-bundle-test --format=php-clover build/coverage.xml
