@@ -10,25 +10,17 @@ on:
 
 jobs:
   tests:
-    name: Tests PHP ${{ matrix.php }} ${{ matrix.dependency }} (Symfony ${{ matrix.symfony }})
+    name: Tests PHP ${{ matrix.php }} ${{ matrix.dependency }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php:
-          - '5.5'
-          - '5.6'
-          - '7.0'
-          - '7.1'
           - '7.2'
           - '7.3'
           - '7.4'
           - '8.0'
-        symfony:
-          - '3.4.*'
-          - '4.4.*'
-          - '5.0.*'
         include:
-          - php: '7.1'
+          - php: '7.4'
             coverage: true
         dependency:
           - ''
@@ -42,7 +34,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl, dom, iconv, intl, json, libxml, mbstring, phar, tokenizer, xdebug, xml, xmlwriter
+          extensions: composer:v2, flex, pcov
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -54,11 +46,6 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ matrix.php }}-composer-
-
-      - name: Configure Symfony
-        run: |
-          composer global require symfony/flex
-          composer config extra.symfony.require "${{ matrix.symfony }}"
 
       - name: Update project dependencies
         if: matrix.dependency == ''
@@ -72,7 +59,7 @@ jobs:
         run: composer validate --strict --no-check-lock
 
       - name: Run tests
-        if: !matrix.coverage
+        if: matrix.coverage == ''
         run: vendor/bin/phpunit
 
       - name: Run tests with coverage
@@ -80,7 +67,7 @@ jobs:
         run: vendor/bin/phpunit --coverage-text --coverage-clover=build/coverage.xml
 
       - name: Upload coverage
-        if: matrix.coverage
+        if: matrix.coverage && matrix.dependency == ''
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover build/coverage.xml
