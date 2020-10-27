@@ -2,18 +2,16 @@
 
 [![Latest Version](https://img.shields.io/github/release/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://github.com/Nyholm/symfony-bundle-test/releases)
 [![Build Status](https://img.shields.io/travis/SymfonyTest/symfony-bundle-test/master.svg?style=flat-square)](https://travis-ci.org/SymfonyTest/symfony-bundle-test)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://scrutinizer-ci.com/g/Nyholm/symfony-bundle-test)
-[![Quality Score](https://img.shields.io/scrutinizer/g/Nyholm/symfony-bundle-test.svg?style=flat-square)](https://scrutinizer-ci.com/g/Nyholm/symfony-bundle-test)
 [![Total Downloads](https://img.shields.io/packagist/dt/nyholm/symfony-bundle-test.svg?style=flat-square)](https://packagist.org/packages/nyholm/symfony-bundle-test)
 
 **Test if your bundle is compatible with different Symfony versions**
 
 When you want to make sure that your bundle works with different versions of Symfony
-you need to create a custom `AppKernel` and load your bundle and configuration. 
+you need to create a custom `AppKernel` and load your bundle and configuration.
 
-Using this bundle test together with Matthias Nobacks's 
+Using this bundle test together with Matthias Nobacks's
 [SymfonyDependencyInjectionTest](https://github.com/SymfonyTest/SymfonyDependencyInjectionTest)
-will give you a good base for testing a Symfony bundle. 
+will give you a good base for testing a Symfony bundle.
 
 ## Install
 
@@ -42,7 +40,7 @@ class BundleInitializationTest extends BaseBundleTestCase
     {
         // Boot the kernel.
         $this->bootKernel();
-        
+
         // Get the container
         $container = $this->getContainer();
 
@@ -51,22 +49,22 @@ class BundleInitializationTest extends BaseBundleTestCase
         $service = $container->get('acme.foo');
         $this->assertInstanceOf(Foo::class, $service);
     }
-    
+
     public function testBundleWithDifferentConfiguration()
     {
         // Create a new Kernel
         $kernel = $this->createKernel();
-        
+
         // Add some configuration
         $kernel->addConfigFile(__DIR__.'/config.yml');
-        
+
         // Add some other bundles we depend on
         $kernel->addBundle(OtherBundle::class);
 
         // Boot the kernel as normal ...
         $this->bootKernel();
-        
-        // ... 
+
+        // ...
     }
 }
 
@@ -75,7 +73,7 @@ class BundleInitializationTest extends BaseBundleTestCase
 ## Private services in Symfony 4
 
 In Symfony 4 services are private by default. This is a good thing, but in order to test them properly we need to make
-them public when we are running the tests. This can easily be done with a compiler pass. 
+them public when we are running the tests. This can easily be done with a compiler pass.
 
 ```php
 class BundleInitializationTest extends BaseBundleTestCase
@@ -83,10 +81,10 @@ class BundleInitializationTest extends BaseBundleTestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         // Make all services public
         $this->addCompilerPass(new PublicServicePass());
-        
+
         // Make services public that have an idea that matches a regex
         $this->addCompilerPass(new PublicServicePass('|my_bundle.*|'));
     }
@@ -101,7 +99,7 @@ Be aware that if you make all services public then you will not get any errors i
 
 ## Configure Travis
 
-You want Travis to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html). 
+You want Travis to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ```yaml
 language: php
