@@ -12,12 +12,7 @@ jobs:
   tests:
     name: Tests PHP ${{ matrix.php }} ${{ matrix.dependency }} (Symfony ${{ matrix.symfony }})
     runs-on: ubuntu-latest
-    container:
-      image: php:${{ matrix.php }}
-      options: >-
-        --tmpfs /tmp:exec
     strategy:
-      # https://github.community/t5/GitHub-Actions/GitHub-Actions-Matrix-options-dont-work-as-documented/m-p/29558
       matrix:
         php:
           - '5.5'
@@ -27,7 +22,7 @@ jobs:
           - '7.2'
           - '7.3'
           - '7.4'
-          - '8.0.0RC2'
+          - '8.0'
         symfony:
           - '3.4.*'
           - '4.4.*'
@@ -35,11 +30,7 @@ jobs:
         include:
           - php: '7.1'
             coverage: true
-          - php: '7.1'
-            dependency: 'dunglas/symfony-lock:^3'
-          - php: '7.1'
-            dependency: 'dunglas/symfony-lock:^4'
-        prefer:
+        dependency:
           - ''
           - 'lowest'
       fail-fast: false
@@ -47,40 +38,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: "Cache dependencies installed with composer"
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, dom, iconv, intl, json, libxml, mbstring, phar, tokenizer, xdebug, xml, xmlwriter
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
         uses: actions/cache@v1
         with:
-          path: ~/.composer/cache
-          key: ${{ matrix.php }}-composer-${{ matrix.prefer }}-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ matrix.php }}-composer-${{ matrix.prefer }}-
-
-      - name: Install system packages
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends \
-            unzip\
-            libzip-dev
-          docker-php-ext-install zip
-
-      - name: Install Composer
-        run: curl -sS -o - https://raw.githubusercontent.com/composer/getcomposer.org/ba13e3fc70f1c66250d1ea7ea4911d593aa1dba5/web/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ matrix.php }}-composer-
 
       - name: Configure Symfony
         run: |
           composer global require symfony/flex
           composer config extra.symfony.require "${{ matrix.symfony }}"
 
-      - name: Add extra dependencies
-        if: matrix.dependency != ''
-        run: composer require --no-update "${{ matrix.dependency }}"
-
       - name: Update project dependencies
-        if: matrix.prefer == ''
+        if: matrix.dependency == ''
         run: composer update --no-progress --ansi --prefer-stable
 
       - name: Update project dependencies lowest
-        if: matrix.prefer == 'lowest'
+        if: matrix.dependency == 'lowest'
         run: composer update --no-progress --ansi --prefer-stable --prefer-lowest
 
       - name: Validate composer
@@ -97,5 +82,5 @@ jobs:
       - name: Upload coverage
         if: matrix.coverage
         run: |
-            wget https://scrutinizer-ci.com/ocular.phar
-            php ocular.phar code-coverage:upload --format=php-clover build/coverage.xml
+          wget https://scrutinizer-ci.com/ocular.phar
+          php ocular.phar code-coverage:upload --format=php-clover build/coverage.xml
