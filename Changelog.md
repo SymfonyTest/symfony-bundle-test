@@ -1,6 +1,13 @@
 # Change Log
 
-The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release. 
+The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
+
+## 1.7.0
+
+### Added
+
+- Support for PHP 8
+- Automatically add `framework.router.utf8: true` on Symfony >= 5.1
 
 ## 1.6.1
 
@@ -43,13 +50,13 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 
 ### Fixed
 
-- Symfony 3.4/4.0 fix with annotations. 
+- Symfony 3.4/4.0 fix with annotations.
 
 ## 1.2.2
 
 ### Changed
 
-- Only disable annotations if they are not installed. 
+- Only disable annotations if they are not installed.
 
 ## 1.2.1
 
