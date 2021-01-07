@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:configuration="http://example.org/schema/dic/configuration"
+           xsi:schemaLocation="http://example.org/schema/dic/configuration">
+    <configuration:config foo="val1">
+            <configuration:bar>val2</configuration:bar>
+            <configuration:bar>val3</configuration:bar>
+    </configuration:config>
+</container>
