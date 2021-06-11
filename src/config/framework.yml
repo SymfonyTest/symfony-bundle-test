@@ -4,8 +4,6 @@ imports:
 framework:
     secret: test
     test: ~
-    session:
-        storage_id: session.storage.mock_file
     form: false
     csrf_protection: false
     validation:
