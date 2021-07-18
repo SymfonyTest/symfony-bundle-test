@@ -98,9 +98,6 @@ abstract class BaseBundleTestCase extends TestCase
         }
     }
 
-    /**
-     * @param CompilerPassInterface $compilerPass
-     */
     protected function addCompilerPass(CompilerPassInterface $compilerPass)
     {
         $this->compilerPasses[] = $compilerPass;
@@ -109,7 +106,8 @@ abstract class BaseBundleTestCase extends TestCase
     /**
      * @param string|null $routingFile
      */
-    public function setRoutingFile($routingFile) {
+    public function setRoutingFile($routingFile)
+    {
         $this->routingFile = $routingFile;
     }
 }
