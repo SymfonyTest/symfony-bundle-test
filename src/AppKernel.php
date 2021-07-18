@@ -197,7 +197,8 @@ class AppKernel extends Kernel
     /**
      * @param string|null $routingFile
      */
-    public function setRoutingFile($routingFile) {
+    public function setRoutingFile($routingFile)
+    {
         $this->routingFile = $routingFile;
     }
 }
