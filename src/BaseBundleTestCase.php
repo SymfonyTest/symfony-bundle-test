@@ -28,6 +28,11 @@ abstract class BaseBundleTestCase extends TestCase
     abstract protected function getBundleClass();
 
     /**
+     * @var string|null
+     */
+    private $routingFile = null;
+
+    /**
      * Boots the Kernel for this test.
      *
      * @param array $options
@@ -68,6 +73,7 @@ abstract class BaseBundleTestCase extends TestCase
         $this->kernel = new $class(uniqid('cache'));
         $this->kernel->addBundle($this->getBundleClass());
         $this->kernel->addCompilerPasses($this->compilerPasses);
+        $this->kernel->setRoutingFile($this->routingFile)
 
         return $this->kernel;
     }
@@ -98,5 +104,12 @@ abstract class BaseBundleTestCase extends TestCase
     protected function addCompilerPass(CompilerPassInterface $compilerPass)
     {
         $this->compilerPasses[] = $compilerPass;
+    }
+
+    /**
+     * @param string|null $routingFile
+     */
+    public function setRoutingFile($routingFile) {
+        $this->routingFile = $routingFile;
     }
 }
