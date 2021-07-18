@@ -73,7 +73,7 @@ abstract class BaseBundleTestCase extends TestCase
         $this->kernel = new $class(uniqid('cache'));
         $this->kernel->addBundle($this->getBundleClass());
         $this->kernel->addCompilerPasses($this->compilerPasses);
-        $this->kernel->setRoutingFile($this->routingFile)
+        $this->kernel->setRoutingFile($this->routingFile);
 
         return $this->kernel;
     }
