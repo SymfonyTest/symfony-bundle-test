@@ -97,69 +97,43 @@ class BundleInitializationTest extends BaseBundleTestCase
 
 Be aware that if you make all services public then you will not get any errors if your bundles access this services even if they are private by nature.
 
-## Configure Travis
+## Configure Github Actions
 
-You want Travis to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+Create a file in .github/workflows directory:
 ```yaml
-language: php
-sudo: false
-cache:
-    directories:
-        - $HOME/.composer/cache/files
-        - $HOME/symfony-bridge/.phpunit
+#.github/workflows/php.yml
+name: My bundle test
 
-env:
-    global:
-        - PHPUNIT_FLAGS=""
-        - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
+on:
+  push: ~
+  pull_request: ~
 
-matrix:
-    fast_finish: true
-    include:
-          # Minimum supported dependencies with the latest and oldest PHP version
-        - php: 7.2
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
-        - php: 5.5
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest, windows-latest ]
+        php: [ '7.4', '8.0' ]
+        symfony: ['4.4', '5.3']
 
-          # Test the latest stable release
-        - php: 5.5
-        - php: 5.6
-        - php: 7.0
-        - php: 7.1
-        - php: 7.2
-          env: COVERAGE=true PHPUNIT_FLAGS="-v --testsuite main --coverage-text --coverage-clover=build/coverage.xml"
+    steps:
+      - uses: actions/checkout@master
 
-        - php: 7.1
-          env: DEPENDENCIES="dunglas/symfony-lock:^2"
-        - php: 7.1
-          env: DEPENDENCIES="dunglas/symfony-lock:^3"
-        - php: 7.1
-          env: DEPENDENCIES="dunglas/symfony-lock:^4"
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: flex
 
-          # Latest commit to master
-        - php: 7.2
-          env: STABILITY="dev"
+      - name: Download dependencies
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+        uses: ramsey/composer-install@v1
 
-    allow_failures:
-          # Dev-master is allowed to fail.
-        - env: STABILITY="dev"
-
-before_install:
-    - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
-    - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
-    - composer require --no-update symfony/phpunit-bridge:^4.0 ${DEPENDENCIES}
-
-install:
-    # To be removed when this issue will be resolved: https://github.com/composer/composer/issues/5355
-    - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
-    - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
-    - ./vendor/bin/simple-phpunit install
-
-script:
-    - composer validate --strict --no-check-lock
-    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
-
+      - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+        run: ./vendor/bin/phpunit
 ```
-
