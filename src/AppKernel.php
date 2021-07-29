@@ -138,7 +138,7 @@ class AppKernel extends Kernel
                 ],
             ]);
 
-            $this->configFiles = array_unique($this->configFiles);
+            $this->configFiles = array_unique($this->configFiles, SORT_REGULAR);
             foreach ($this->configFiles as $path) {
                 $loader->load($path);
             }
