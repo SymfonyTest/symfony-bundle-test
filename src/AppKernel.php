@@ -2,6 +2,7 @@
 
 namespace Nyholm\BundleTest;
 
+use Symfony\Bundle\FrameworkBundle\CacheWarmer\ConfigBuilderCacheWarmer;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -52,7 +53,13 @@ class AppKernel extends Kernel
         parent::__construct($cachePrefix, true);
         $this->cachePrefix = $cachePrefix;
         $this->addBundle(FrameworkBundle::class);
+
         $this->addConfigFile(__DIR__.'/config/framework.yml');
+        if (class_exists(ConfigBuilderCacheWarmer::class)) {
+            $this->addConfigFile(__DIR__.'/config/framework-53.yml');
+        } else {
+            $this->addConfigFile(__DIR__.'/config/framework-52.yml');
+        }
     }
 
     /**
