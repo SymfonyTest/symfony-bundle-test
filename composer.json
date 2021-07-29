@@ -20,15 +20,19 @@
         "phpunit/phpunit": "^8.5 || ^9.4"
     },
     "autoload": {
-        "psr-4": { "Nyholm\\BundleTest\\": "src/" }
+        "psr-4": {
+            "Nyholm\\BundleTest\\": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "Nyholm\\BundleTest\\Tests\\": "tests/" }
+        "psr-4": {
+            "Nyholm\\BundleTest\\Tests\\": "tests/"
+        }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-ci": "vendor/bin/phpunit --coverage-text --coverage-clover=build/coverage.xml"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
