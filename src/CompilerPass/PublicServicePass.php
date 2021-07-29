@@ -25,9 +25,6 @@ class PublicServicePass implements CompilerPassInterface
         $this->regex = $regex;
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         foreach ($container->getDefinitions() as $id => $definition) {

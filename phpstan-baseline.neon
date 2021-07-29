@@ -1,0 +1,42 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Access to an undefined property Nyholm\\\\BundleTest\\\\AppKernel\\:\\:\\$rootDir\\.$#"
+			count: 1
+			path: src/AppKernel.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$bundle$#"
+			count: 1
+			path: src/AppKernel.php
+
+		-
+			message: "#^Call to method reset\\(\\) on an unknown class Symfony\\\\Component\\\\DependencyInjection\\\\ResettableContainerInterface\\.$#"
+			count: 1
+			path: src/BaseBundleTestCase.php
+
+		-
+			message: "#^Class Symfony\\\\Component\\\\DependencyInjection\\\\ResettableContainerInterface not found\\.$#"
+			count: 1
+			path: src/BaseBundleTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
+			count: 1
+			path: src/BaseBundleTestCase.php
+
+		-
+			message: "#^Comparison operation \"\\>\\=\" between 50306 and 30300 is always true\\.$#"
+			count: 1
+			path: src/config/parameters.php
+
+		-
+			message: "#^Comparison operation \"\\>\\=\" between 50306 and 50100 is always true\\.$#"
+			count: 1
+			path: src/config/parameters.php
+
+		-
+			message: "#^Variable \\$container might not be defined\\.$#"
+			count: 3
+			path: src/config/parameters.php
+

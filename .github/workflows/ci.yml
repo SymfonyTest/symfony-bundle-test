@@ -1,16 +1,9 @@
-name: CI
-
-on:
-  schedule:
-    - cron: 0 2 * * 1-5
-  pull_request:
-  push:
-    branches:
-      - master
+name: Tests
+on: [ pull_request ]
 
 jobs:
   tests:
-    name: Tests PHP ${{ matrix.php }} ${{ matrix.dependency }} (Symfony ${{ matrix.symfony }})
+    name: PHPUnit PHP ${{ matrix.php }} ${{ matrix.dependency }} (Symfony ${{ matrix.symfony }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -61,7 +54,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: composer:v2, flex, pcov
+          extensions: composer, flex, pcov
 
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.symfony }}"
