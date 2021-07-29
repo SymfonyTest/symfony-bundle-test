@@ -2,6 +2,18 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 1.8.0
+
+### Added
+
+- Support for Symfony 6
+- Support for adding config with closures
+
+### Fixed
+
+- Routing with the Kernel
+- Deprecation error in Symfony 5.3
+
 ## 1.7.0
 
 ### Added
