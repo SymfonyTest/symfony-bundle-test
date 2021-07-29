@@ -40,6 +40,11 @@ class AppKernel extends Kernel
     private $compilerPasses = [];
 
     /**
+     * @var string|null
+     */
+    private $routingFile = null;
+
+    /**
      * @param string $cachePrefix
      */
     public function __construct($cachePrefix)
@@ -121,7 +126,7 @@ class AppKernel extends Kernel
         $loader->load(function (ContainerBuilder $container) use ($loader) {
             $container->loadFromExtension('framework', [
                 'router' => [
-                    'resource' => 'kernel:loadRoutes',
+                    'resource' => 'kernel::loadRoutes',
                     'type' => 'service',
                 ],
             ]);
@@ -130,6 +135,20 @@ class AppKernel extends Kernel
             foreach ($this->configFiles as $path) {
                 $loader->load($path);
             }
+
+            $kernelClass = false !== strpos(static::class, "@anonymous\0") ? parent::class : static::class;
+
+            if (!$container->hasDefinition('kernel')) {
+                $container->register('kernel', $kernelClass)
+                    ->addTag('controller.service_arguments')
+                    ->setAutoconfigured(true)
+                    ->setSynthetic(true)
+                    ->setPublic(true)
+                ;
+            }
+
+            $kernelDefinition = $container->getDefinition('kernel');
+            $kernelDefinition->addTag('routing.route_loader');
 
             $container->addObjectResource($this);
         });
@@ -143,7 +162,12 @@ class AppKernel extends Kernel
     public function loadRoutes(LoaderInterface $loader)
     {
         $routes = new RouteCollectionBuilder($loader);
-        $routes->import(__DIR__.'/config/routing.yml');
+
+        if ($this->routingFile) {
+            $routes->import($this->routingFile);
+        } else {
+            $routes->import(__DIR__.'/config/routing.yml');
+        }
 
         return $routes->build();
     }
@@ -168,5 +192,13 @@ class AppKernel extends Kernel
     public function addCompilerPasses(array $compilerPasses)
     {
         $this->compilerPasses = $compilerPasses;
+    }
+
+    /**
+     * @param string|null $routingFile
+     */
+    public function setRoutingFile($routingFile)
+    {
+        $this->routingFile = $routingFile;
     }
 }
