@@ -101,104 +101,39 @@ Be aware that if you make all services public then you will not get any errors i
 
 You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. NB There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Step1, add a script to test in composer.json
-
-```json
-   "scripts": {
-        "test": "vendor/bin/phpunit"
-    },
-```
-
-Step2, create a file in .github/workflows directory:
+Create a file in .github/workflows directory:
 ```yaml
 #.github/workflows/php.yml
 name: My bundle test
 
 on:
   push: ~
-  pull_request:
-    branches: [ main ]
+  pull_request: ~
 
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
     strategy:
       matrix:
-        operating-system: [ ubuntu-latest ] #, windows-latest ]
+        operating-system: [ ubuntu-latest, windows-latest ]
         php: [ '7.4', '8.0' ]
-        symfony: ['4.4', '5.2', '5.3']
-        exclude:
-          # excludes symfony 4.4 on linux-php-7.4
-          - operating-system: ubuntu-latest
-            php: '8.0'
-            symfony: '4.4'
-    name: With PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+        symfony: ['4.4', '5.3']
+
     steps:
       - uses: actions/checkout@master
-
-      - name: Validate composer.json
-        run: composer validate --strict
 
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          tools: flex
 
-      - name: Echo PHP version
-        run: php -v
-
-      - name: Install symfony/flex
-        run: composer global require --no-progress --no-scripts --no-plugins symfony/flex
-
-      - name: Validate composer.json with ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
-        run: composer validate --strict
-
-      - name: Cache Composer packages with ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}
-
-      - name: Composer update with PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
-        run: SYMFONY_REQUIRE=${{ matrix.symfony }} composer update --prefer-dist --no-progress
+      - name: Download dependencies
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+        uses: ramsey/composer-install@v1
 
       - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
-        run: composer run-script test
-```
-Step3, commit and push. Job done!
-
-## Configure Travis
-
-You want Travis to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
-
-```yaml
-language: php
-sudo: false
-cache:
-    directories:
-        - $HOME/.composer/cache/files
-
-matrix:
-    fast_finish: true
-    include:
-        - php: 7.4
-          env: SYMFONY_VERSION=4.4
-        - php: 7.4
-          env: SYMFONY_VERSION=5.2
-        - php: 7.4
-          env: SYMFONY_VERSION=5.3
-        - php: 8.0
-          env: SYMFONY_VERSION=5.2
-        - php: 8.0
-          env: SYMFONY_VERSION=5.3
-
-install:
-    - SYMFONY_VERSION=${SYMFONY_VERSION} composer update --prefer-dist --no-interaction
-
-script:
-    - composer validate --strict --no-check-lock
-    - composer run-script test
+        run: ./vendor/bin/phpunit
 ```
