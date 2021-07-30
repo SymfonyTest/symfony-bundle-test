@@ -53,9 +53,8 @@ final class BundleConfigurationTest extends KernelTestCase
      */
     public function testBundleWithDifferentConfigurationFormats($config)
     {
-        self::bootKernel(['configFiles' => [$config]]);
-
-        $container = self::getContainer();
+        $kernel = self::bootKernel(['configFiles' => [$config]]);
+        $container = $kernel->getContainer();
 
         $this->assertEquals('val1', $container->getParameter('app.foo'));
         $this->assertEquals(['val2', 'val3'], $container->getParameter('app.bar'));

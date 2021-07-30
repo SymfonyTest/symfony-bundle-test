@@ -49,10 +49,13 @@ class BundleInitializationTest extends KernelTestCase
     public function testInitBundle()
     {
         // Boot the kernel.
-        self::bootKernel();
+        $kernel = self::bootKernel();
 
         // Get the container
-        $container = self::getContainer();
+        $container = $kernel->getContainer();
+
+        // Or for FrameworkBundle@^5.3.6 to access private services without the PublicCompilerPass
+        // $container = self::getContainer();
 
         // Test if you services exists
         $this->assertTrue($container->has('acme.foo'));

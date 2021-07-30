@@ -26,8 +26,8 @@ class BundleInitializationTest extends KernelTestCase
 
     public function testRegisterBundle()
     {
-        self::bootKernel();
-        $container = self::getContainer();
+        $kernel = self::bootKernel();
+        $container = $kernel->getContainer();
         $this->assertTrue($container->has('kernel'));
     }
 }
