@@ -46,14 +46,23 @@ class AppKernel extends Kernel
     private $routingFile = null;
 
     /**
-     * @param string $cachePrefix
+     * {@inheritDoc}
      */
-    public function __construct($cachePrefix)
+    public function __construct(/*string $environment, bool $debug*/)
     {
-        parent::__construct($cachePrefix, true);
-        $this->cachePrefix = $cachePrefix;
-        $this->addBundle(FrameworkBundle::class);
+        $args = \func_get_args();
 
+        if (1 === \func_num_args()) {
+            trigger_deprecation('nyholm/symfony-bundle-test', '1.9', 'The signature of the "%s($cachePrefix)" constructor is deprecated, use the constructor with 2 arguments: "string $environment, bool $debug".', self::class);
+
+            parent::__construct($args[0], true);
+        } elseif (2 === \func_num_args()) {
+            parent::__construct($args[0], $args[1]);
+
+            $this->cachePrefix = uniqid('cache', true);
+        }
+
+        $this->addBundle(FrameworkBundle::class);
         $this->addConfigFile(__DIR__.'/config/framework.yml');
         if (class_exists(ConfigBuilderCacheWarmer::class)) {
             $this->addConfigFile(__DIR__.'/config/framework-53.yml');
@@ -179,6 +188,11 @@ class AppKernel extends Kernel
         return $routes->build();
     }
 
+    public function setCachePrefix($cachePrefix)
+    {
+        $this->cachePrefix = $cachePrefix;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -207,5 +221,28 @@ class AppKernel extends Kernel
     public function setRoutingFile($routingFile)
     {
         $this->routingFile = $routingFile;
+    }
+
+    public function handleOptions(array $options)
+    {
+        if (array_key_exists('bundles', $options)) {
+            foreach ($options['bundles'] as $bundle) {
+                $this->addBundle($bundle);
+            }
+        }
+
+        if (array_key_exists('configFiles', $options)) {
+            foreach ($options['configFiles'] as $bundle) {
+                $this->addConfigFile($bundle);
+            }
+        }
+
+        if (array_key_exists('compilerPasses', $options)) {
+            $this->addCompilerPasses($options['compilerPasses']);
+        }
+
+        if (array_key_exists('routingFile', $options)) {
+            $this->setRoutingFile($options['routingFile']);
+        }
     }
 }

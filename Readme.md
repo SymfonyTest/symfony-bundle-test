@@ -25,24 +25,34 @@ $ composer require --dev nyholm/symfony-bundle-test
 
 ```php
 
-use Nyholm\BundleTest\BaseBundleTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Nyholm\BundleTest\AppKernel;
 use Acme\AcmeFooBundle;
 use Acme\Service\Foo;
 
-class BundleInitializationTest extends BaseBundleTestCase
+class BundleInitializationTest extends KernelTestCase
 {
-    protected function getBundleClass()
+    protected static function createKernel(array $options = [])
     {
-        return AcmeFooBundle::class;
+        KernelTestCase::$class = AppKernel::class;
+
+        /**
+         * @var AppKernel $kernel
+         */
+        $kernel = parent::createKernel($options);
+        $kernel->addBundle(AcmeFooBundle::class);
+        $kernel->handleOptions($options);
+
+        return $kernel;
     }
 
     public function testInitBundle()
     {
         // Boot the kernel.
-        $this->bootKernel();
+        self::bootKernel();
 
         // Get the container
-        $container = $this->getContainer();
+        $container = self::getContainer();
 
         // Test if you services exists
         $this->assertTrue($container->has('acme.foo'));
@@ -52,17 +62,17 @@ class BundleInitializationTest extends BaseBundleTestCase
 
     public function testBundleWithDifferentConfiguration()
     {
-        // Create a new Kernel
-        $kernel = $this->createKernel();
-
-        // Add some configuration
-        $kernel->addConfigFile(__DIR__.'/config.yml');
-
-        // Add some other bundles we depend on
-        $kernel->addBundle(OtherBundle::class);
-
         // Boot the kernel as normal ...
-        $this->bootKernel();
+        $kernel = self::bootKernel([
+            'bundles' => [
+                // Add some other bundles we depend on
+                OtherBundle::class,
+            ],
+            'configFiles' => [
+                // Add some configuration
+                __DIR__.'/config.yml',
+            ],
+        ]);
 
         // ...
     }

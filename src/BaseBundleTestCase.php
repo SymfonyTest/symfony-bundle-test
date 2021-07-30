@@ -3,12 +3,17 @@
 namespace Nyholm\BundleTest;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
+trigger_deprecation('nyholm/symfony-bundle-test', '1.9', 'Deprecated since 1.9 and will be removed in 2.0, use %s instead.', KernelTestCase::class);
+
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ *
+ * @deprecated Deprecated since 1.9 and will be removed in 2.0, use {@link KernelTestCase} instead.
  */
 abstract class BaseBundleTestCase extends TestCase
 {
