@@ -244,5 +244,9 @@ class AppKernel extends Kernel
         if (array_key_exists('routingFile', $options)) {
             $this->setRoutingFile($options['routingFile']);
         }
+
+        if (array_key_exists('cachePrefix', $options)) {
+            $this->setCachePrefix($options['cachePrefix']);
+        }
     }
 }
