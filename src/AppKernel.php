@@ -53,7 +53,7 @@ class AppKernel extends Kernel
         $args = \func_get_args();
 
         if (1 === \func_num_args()) {
-            trigger_deprecation('nyholm/symfony-bundle-test', '1.9', 'The signature of the "%s($cachePrefix)" constructor is deprecated, use the constructor with 2 arguments: "string $environment, bool $debug".', self::class);
+            printf('The signature of the method "%s($cachePrefix)" is deprecated since 1.9 and will be removed in 2.0, use with 2 arguments instead: "string $environment, bool $debug".', __METHOD__);
 
             parent::__construct($args[0], true);
         } elseif (2 === \func_num_args()) {
