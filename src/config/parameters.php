@@ -1,7 +1,7 @@
 <?php
 
-// If symfony is greater than 3.3 and no annotations are installed, then disable it.
-if (\Symfony\Component\HttpKernel\Kernel::VERSION_ID >= 30300 && !class_exists('Doctrine\Common\Annotations\Annotation')) {
+// If annotations aren't installed, disable it.
+if (!class_exists('Doctrine\Common\Annotations\Annotation')) {
     $container->loadFromExtension('framework', [
         'annotations' => ['enabled' => false],
     ]);
