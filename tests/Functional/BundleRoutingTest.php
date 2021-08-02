@@ -8,17 +8,17 @@ use Symfony\Component\Routing\RouterInterface;
 
 class BundleRoutingTest extends BaseBundleTestCase
 {
-    public function testRegisterBundle()
+    public function testSetRoutingFile()
     {
         $this->setRoutingFile(__DIR__.'/../Fixtures/Resources/Routing/routes.yml');
 
         $this->bootKernel();
         $container = $this->getContainer();
-        $testContainer = $container->get('test.service_container');
+        $container = $container->get('test.service_container');
         /**
          * @var RouterInterface $router
          */
-        $router = $testContainer->get(RouterInterface::class);
+        $router = $container->get(RouterInterface::class);
         $routeCollection = $router->getRouteCollection();
         $routes = $routeCollection->all();
 
