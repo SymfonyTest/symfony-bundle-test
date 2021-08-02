@@ -3,7 +3,6 @@
 namespace Nyholm\BundleTest\Tests\Functional;
 
 use Nyholm\BundleTest\AppKernel;
-use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\ConfigurationBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Routing\RouterInterface;
@@ -25,11 +24,11 @@ class BundleRoutingTest extends KernelTestCase
 
     public function testSetRoutingFile()
     {
-        self::bootKernel([
+        $kernel = self::bootKernel([
             'routingFile' => __DIR__.'/../Fixtures/Resources/Routing/routes.yml',
         ]);
 
-        $container = self::getContainer();
+        $container = $kernel->getContainer();
         $container = $container->get('test.service_container');
         /**
          * @var RouterInterface $router
