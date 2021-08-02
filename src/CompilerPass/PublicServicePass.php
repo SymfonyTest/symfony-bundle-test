@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @deprecated Deprecated since 1.9 and will be removed in 2.0, use the test.service_container service instead.
  */
 class PublicServicePass implements CompilerPassInterface
 {

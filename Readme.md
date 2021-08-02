@@ -72,6 +72,8 @@ class BundleInitializationTest extends BaseBundleTestCase
 
 ## Private services in Symfony 4
 
+**Deprecated**: since 1.9 and will be removed in 2.0, use the `test.service_container` instead.
+
 In Symfony 4 services are private by default. This is a good thing, but in order to test them properly we need to make
 them public when we are running the tests. This can easily be done with a compiler pass.
 
