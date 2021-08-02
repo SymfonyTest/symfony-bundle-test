@@ -70,35 +70,6 @@ class BundleInitializationTest extends BaseBundleTestCase
 
 ```
 
-## Private services in Symfony 4
-
-**Deprecated**: since 1.9 and will be removed in 2.0, use the `test.service_container` instead.
-
-In Symfony 4 services are private by default. This is a good thing, but in order to test them properly we need to make
-them public when we are running the tests. This can easily be done with a compiler pass.
-
-```php
-class BundleInitializationTest extends BaseBundleTestCase
-{
-    protected function setUp()
-    {
-        parent::setUp();
-
-        // Make all services public
-        $this->addCompilerPass(new PublicServicePass());
-
-        // Make services public that have an idea that matches a regex
-        $this->addCompilerPass(new PublicServicePass('|my_bundle.*|'));
-    }
-
-    // ...
-}
-```
-
-### Known Issue
-
-Be aware that if you make all services public then you will not get any errors if your bundles access this services even if they are private by nature.
-
 ## Configure Github Actions
 
 You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
