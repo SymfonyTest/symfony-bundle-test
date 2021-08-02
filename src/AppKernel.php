@@ -48,19 +48,11 @@ class AppKernel extends Kernel
     /**
      * {@inheritDoc}
      */
-    public function __construct(/*string $environment, bool $debug*/)
+    public function __construct(string $environment, bool $debug)
     {
-        $args = \func_get_args();
+        parent::__construct($environment, $debug);
 
-        if (1 === \func_num_args()) {
-            printf('The signature of the method "%s($cachePrefix)" is deprecated since 1.9 and will be removed in 2.0, use with 2 arguments instead: "string $environment, bool $debug".', __METHOD__);
-
-            parent::__construct($args[0], true);
-        } elseif (2 === \func_num_args()) {
-            parent::__construct($args[0], $args[1]);
-
-            $this->cachePrefix = uniqid('cache', true);
-        }
+        $this->cachePrefix = uniqid('cache', true);
 
         $this->addBundle(FrameworkBundle::class);
         $this->addConfigFile(__DIR__.'/config/framework.yml');
@@ -247,6 +239,10 @@ class AppKernel extends Kernel
 
         if (array_key_exists('cachePrefix', $options)) {
             $this->setCachePrefix($options['cachePrefix']);
+        }
+
+        if (array_key_exists('projectDir', $options)) {
+            $this->setProjectDir($options['projectDir']);
         }
     }
 }
