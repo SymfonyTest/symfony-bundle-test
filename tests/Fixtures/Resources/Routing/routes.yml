@@ -1,0 +1,5 @@
+app_home:
+    path: /
+
+app_blog:
+    path: /blog
