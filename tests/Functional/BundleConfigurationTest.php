@@ -32,17 +32,12 @@ final class BundleConfigurationTest extends KernelTestCase
             [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.yml'],
             [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.xml'],
             [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.php'],
-            [
-                function (ContainerBuilder $container) {
-                    $container->loadFromExtension(
-                        'configuration',
-                        [
-                            'foo' => 'val1',
-                            'bar' => ['val2', 'val3'],
-                        ]
-                    );
-                },
-            ],
+            [function (ContainerBuilder $container) {
+                $container->loadFromExtension('configuration', [
+                    'foo' => 'val1',
+                    'bar' => ['val2', 'val3'],
+                ]);
+            }],
         ];
     }
 
