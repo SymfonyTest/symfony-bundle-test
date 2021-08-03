@@ -210,30 +210,10 @@ class AppKernel extends Kernel
         $this->routingFile = $routingFile;
     }
 
-    public function handleOptions(array $options)
+    public function handleOptions(array $options): void
     {
-        if (array_key_exists('bundles', $options)) {
-            foreach ($options['bundles'] as $bundle) {
-                $this->addBundle($bundle);
-            }
-        }
-
-        if (array_key_exists('configFiles', $options)) {
-            foreach ($options['configFiles'] as $bundle) {
-                $this->addConfigFile($bundle);
-            }
-        }
-
-        if (array_key_exists('compilerPasses', $options)) {
-            $this->addCompilerPasses($options['compilerPasses']);
-        }
-
-        if (array_key_exists('routingFile', $options)) {
-            $this->setRoutingFile($options['routingFile']);
-        }
-
-        if (array_key_exists('projectDir', $options)) {
-            $this->setProjectDir($options['projectDir']);
+        if (array_key_exists('config', $options) && is_callable($configCallable = $options['config'])) {
+            $configCallable($this);
         }
     }
 }

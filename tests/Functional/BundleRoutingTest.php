@@ -25,7 +25,9 @@ class BundleRoutingTest extends KernelTestCase
     public function testSetRoutingFile()
     {
         $kernel = self::bootKernel([
-            'routingFile' => __DIR__.'/../Fixtures/Resources/Routing/routes.yml',
+            'config' => static function (AppKernel $kernel) {
+                $kernel->setRoutingFile(__DIR__.'/../Fixtures/Resources/Routing/routes.yml');
+            },
         ]);
 
         $container = $kernel->getContainer();

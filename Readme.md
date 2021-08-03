@@ -66,16 +66,13 @@ class BundleInitializationTest extends KernelTestCase
     public function testBundleWithDifferentConfiguration()
     {
         // Boot the kernel as normal ...
-        $kernel = self::bootKernel([
-            'bundles' => [
-                // Add some other bundles we depend on
-                OtherBundle::class,
-            ],
-            'configFiles' => [
-                // Add some configuration
-                __DIR__.'/config.yml',
-            ],
-        ]);
+        $kernel = self::bootKernel(['config' => static function(AppKernel $kernel){
+            // Add some other bundles we depend on
+            $kernel->addBundle(OtherBundle::class);
+
+            // Add some configuration
+            $kernel->addConfigFile(__DIR__.'/config.yml');
+        }]);
 
         // ...
     }
