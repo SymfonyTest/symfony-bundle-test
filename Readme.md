@@ -91,7 +91,7 @@ jobs:
       matrix:
         operating-system: [ ubuntu-latest, windows-latest ]
         php: [ '7.4', '8.0' ]
-        symfony: ['4.4', '5.3']
+        symfony: ['^4.4', '^5.3']
 
     steps:
       - uses: actions/checkout@master
