@@ -46,14 +46,15 @@ class AppKernel extends Kernel
     private $routingFile = null;
 
     /**
-     * @param string $cachePrefix
+     * {@inheritDoc}
      */
-    public function __construct($cachePrefix)
+    public function __construct(string $environment, bool $debug)
     {
-        parent::__construct($cachePrefix, true);
-        $this->cachePrefix = $cachePrefix;
-        $this->addBundle(FrameworkBundle::class);
+        parent::__construct($environment, $debug);
 
+        $this->cachePrefix = uniqid('cache', true);
+
+        $this->addBundle(FrameworkBundle::class);
         $this->addConfigFile(__DIR__.'/config/framework.yml');
         if (class_exists(ConfigBuilderCacheWarmer::class)) {
             $this->addConfigFile(__DIR__.'/config/framework-53.yml');
@@ -207,5 +208,12 @@ class AppKernel extends Kernel
     public function setRoutingFile($routingFile)
     {
         $this->routingFile = $routingFile;
+    }
+
+    public function handleOptions(array $options): void
+    {
+        if (array_key_exists('config', $options) && is_callable($configCallable = $options['config'])) {
+            $configCallable($this);
+        }
     }
 }
