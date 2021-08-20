@@ -38,19 +38,20 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: composer, flex, pcov
+          extensions: pcov
+          tools: flex
 
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.symfony }}"
 
       - name: Prefer unstable Composer dependencies if Symfony 6.0
-        if: matrix.symfony == '6.0.x'
+        if: matrix.symfony == '6.0.*'
         run: composer config prefer-stable false
 
       - name: Get Composer Cache Directory
@@ -58,7 +59,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
