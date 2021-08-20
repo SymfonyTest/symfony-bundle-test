@@ -78,17 +78,17 @@ class AppKernel extends Kernel
         $this->configFiles[] = $configFile;
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return sys_get_temp_dir().'/NyholmBundleTest/'.$this->cachePrefix;
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return sys_get_temp_dir().'/NyholmBundleTest/log';
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         if (null === $this->fakedProjectDir) {
             return realpath(__DIR__.'/../../../../');
@@ -113,7 +113,7 @@ class AppKernel extends Kernel
         $this->fakedProjectDir = $projectDir;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         $this->bundlesToRegister = array_unique($this->bundlesToRegister);
         $bundles = [];
@@ -182,7 +182,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function buildContainer()
+    protected function buildContainer(): ContainerBuilder
     {
         $container = parent::buildContainer();
 
