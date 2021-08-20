@@ -5,11 +5,12 @@ namespace Nyholm\BundleTest\Tests\Functional;
 use Nyholm\BundleTest\AppKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class BundleRoutingTest extends KernelTestCase
 {
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         KernelTestCase::$class = AppKernel::class;
 
