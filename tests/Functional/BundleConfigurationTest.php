@@ -6,13 +6,14 @@ use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\ConfigurationBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @author Laurent VOULLEMIER <laurent.voullemier@gmail.com>
  */
 final class BundleConfigurationTest extends KernelTestCase
 {
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         KernelTestCase::$class = AppKernel::class;
 

@@ -8,6 +8,9 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\Component\Routing\Loader\PhpFileLoader as RoutingPhpFileLoader;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
@@ -79,17 +82,17 @@ class AppKernel extends Kernel
         $this->configFiles[] = $configFile;
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return sys_get_temp_dir().'/NyholmBundleTest/'.$this->cachePrefix;
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return sys_get_temp_dir().'/NyholmBundleTest/log';
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         if (null === $this->fakedProjectDir) {
             return realpath(__DIR__.'/../../../../');
@@ -114,7 +117,7 @@ class AppKernel extends Kernel
         $this->fakedProjectDir = $projectDir;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         $this->bundlesToRegister = array_unique($this->bundlesToRegister);
         $bundles = [];
@@ -169,21 +172,40 @@ class AppKernel extends Kernel
      */
     public function loadRoutes(LoaderInterface $loader)
     {
-        $routes = new RouteCollectionBuilder($loader);
+        if (class_exists(RoutingConfigurator::class)) {
+            $file = (new \ReflectionObject($this))->getFileName();
+            /** @var RoutingPhpFileLoader $kernelLoader */
+            $kernelLoader = $loader->getResolver()->resolve($file, 'php');
+            $kernelLoader->setCurrentDir(\dirname($file));
 
-        if ($this->routingFile) {
-            $routes->import($this->routingFile);
+            $collection = new RouteCollection();
+            $configurator = new RoutingConfigurator($collection, $kernelLoader, $file, $file, $this->getEnvironment());
+
+            if ($this->routingFile) {
+                $configurator->import($this->routingFile);
+            } else {
+                $configurator->import(__DIR__.'/config/routing.yml');
+            }
+
+            return $collection;
         } else {
-            $routes->import(__DIR__.'/config/routing.yml');
-        }
+            // Legacy
+            $routes = new RouteCollectionBuilder($loader);
 
-        return $routes->build();
+            if ($this->routingFile) {
+                $routes->import($this->routingFile);
+            } else {
+                $routes->import(__DIR__.'/config/routing.yml');
+            }
+
+            return $routes->build();
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function buildContainer()
+    protected function buildContainer(): ContainerBuilder
     {
         $container = parent::buildContainer();
 
