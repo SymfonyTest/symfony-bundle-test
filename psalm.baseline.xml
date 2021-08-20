@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.8.1@f73f2299dbc59a3e6c4d66cff4605176e728ee69">
+  <file src="src/AppKernel.php">
+    <InvalidArgument occurrences="1">
+      <code>$kernelLoader</code>
+    </InvalidArgument>
+    <InvalidReturnStatement occurrences="1">
+      <code>$bundles</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>iterable</code>
+    </InvalidReturnType>
+    <ReservedWord occurrences="2">
+      <code>$kernelLoader</code>
+      <code>$loader-&gt;getResolver()-&gt;resolve($file, 'php')</code>
+    </ReservedWord>
+    <UndefinedClass occurrences="1">
+      <code>RouteCollectionBuilder</code>
+    </UndefinedClass>
+  </file>
   <file src="src/BaseBundleTestCase.php">
     <UndefinedClass occurrences="1">
       <code>ResettableContainerInterface</code>
