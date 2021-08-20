@@ -173,7 +173,7 @@ class AppKernel extends Kernel
     {
         if (class_exists(RoutingConfigurator::class)) {
             $file = (new \ReflectionObject($this))->getFileName();
-            /* @var RoutingPhpFileLoader $kernelLoader */
+            /** @var RoutingPhpFileLoader $kernelLoader */
             $kernelLoader = $loader->getResolver()->resolve($file, 'php');
             $kernelLoader->setCurrentDir(\dirname($file));
 
@@ -183,7 +183,7 @@ class AppKernel extends Kernel
             if ($this->routingFile) {
                 $configurator->import($this->routingFile);
             } else {
-                $configurator->import(__DIR__ . '/config/routing.yml');
+                $configurator->import(__DIR__.'/config/routing.yml');
             }
 
             return $collection;
@@ -194,7 +194,7 @@ class AppKernel extends Kernel
             if ($this->routingFile) {
                 $routes->import($this->routingFile);
             } else {
-                $routes->import(__DIR__ . '/config/routing.yml');
+                $routes->import(__DIR__.'/config/routing.yml');
             }
 
             return $routes->build();
