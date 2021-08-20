@@ -2,6 +2,12 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 1.8.1
+
+### Fixed
+
+- Symfony 6 compatibility issues
+
 ## 1.8.0
 
 ### Added
