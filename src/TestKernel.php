@@ -164,7 +164,7 @@ class TestKernel extends Kernel
 
     /**
      * @param ContainerBuilder $container
-     * @param LoaderInterface $loader
+     * @param LoaderInterface  $loader
      */
     protected function configureContainer($container, $loader): void
     {
