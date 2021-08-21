@@ -209,11 +209,11 @@ class TestKernel extends Kernel
     }
 
     /**
-     * @param CompilerPassInterface[] $compilerPasses
+     * @param CompilerPassInterface $compilerPasses
      */
-    public function addCompilerPasses(array $compilerPasses): void
+    public function addCompilerPass($compilerPasses): void
     {
-        $this->compilerPasses = $compilerPasses;
+        $this->compilerPasses[] = $compilerPasses;
     }
 
     /**
