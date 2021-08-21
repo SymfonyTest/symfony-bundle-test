@@ -44,9 +44,4 @@ class BundleRoutingTest extends KernelTestCase
         $this->assertNotNull($routeCollection->get('app_home'));
         $this->assertNotNull($routeCollection->get('app_blog'));
     }
-
-    protected function getBundleClass()
-    {
-        return FrameworkBundle::class;
-    }
 }
