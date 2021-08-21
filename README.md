@@ -5,7 +5,7 @@
 **Test if your bundle is compatible with different Symfony versions**
 
 When you want to make sure that your bundle works with different versions of Symfony
-you need to create a custom `AppKernel` and load your bundle and configuration.
+you need to create a custom `TestKernel` and load your bundle and configuration.
 
 Using this bundle test together with Matthias Nobacks's
 [SymfonyDependencyInjectionTest](https://github.com/SymfonyTest/SymfonyDependencyInjectionTest)
@@ -22,9 +22,10 @@ $ composer require --dev nyholm/symfony-bundle-test
 ## Write a test
 
 ```php
+```php
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Nyholm\BundleTest\AppKernel;
+use Nyholm\BundleTest\TestKernel;
 use Acme\AcmeFooBundle;
 use Acme\Service\Foo;
 
@@ -32,10 +33,10 @@ class BundleInitializationTest extends KernelTestCase
 {
     protected static function createKernel(array $options = [])
     {
-        KernelTestCase::$class = AppKernel::class;
+        KernelTestCase::$class = TestKernel::class;
 
         /**
-         * @var AppKernel $kernel
+         * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
         $kernel->addBundle(AcmeFooBundle::class);
@@ -64,7 +65,7 @@ class BundleInitializationTest extends KernelTestCase
     public function testBundleWithDifferentConfiguration()
     {
         // Boot the kernel as normal ...
-        $kernel = self::bootKernel(['config' => static function(AppKernel $kernel){
+        $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){
             // Add some other bundles we depend on
             $kernel->addBundle(OtherBundle::class);
 

@@ -2,7 +2,7 @@
 
 namespace Nyholm\BundleTest\Tests\Functional;
 
-use Nyholm\BundleTest\AppKernel;
+use Nyholm\BundleTest\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -12,10 +12,10 @@ class BundleRoutingTest extends KernelTestCase
 {
     protected static function createKernel(array $options = []): KernelInterface
     {
-        KernelTestCase::$class = AppKernel::class;
+        KernelTestCase::$class = TestKernel::class;
 
         /**
-         * @var AppKernel $kernel
+         * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
         $kernel->handleOptions($options);
@@ -26,7 +26,7 @@ class BundleRoutingTest extends KernelTestCase
     public function testSetRoutingFile()
     {
         $kernel = self::bootKernel([
-            'config' => static function (AppKernel $kernel) {
+            'config' => static function (TestKernel $kernel) {
                 $kernel->setRoutingFile(__DIR__.'/../Fixtures/Resources/Routing/routes.yml');
             },
         ]);

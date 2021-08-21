@@ -2,7 +2,7 @@
 
 namespace Nyholm\BundleTest\Tests\Functional;
 
-use Nyholm\BundleTest\AppKernel;
+use Nyholm\BundleTest\TestKernel;
 use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\ConfigurationBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,10 +15,10 @@ final class BundleConfigurationTest extends KernelTestCase
 {
     protected static function createKernel(array $options = []): KernelInterface
     {
-        KernelTestCase::$class = AppKernel::class;
+        KernelTestCase::$class = TestKernel::class;
 
         /**
-         * @var AppKernel $kernel
+         * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
         $kernel->addBundle(ConfigurationBundle::class);
@@ -49,7 +49,7 @@ final class BundleConfigurationTest extends KernelTestCase
      */
     public function testBundleWithDifferentConfigurationFormats($config)
     {
-        $kernel = self::bootKernel(['config' => function (AppKernel $kernel) use ($config) {
+        $kernel = self::bootKernel(['config' => function (TestKernel $kernel) use ($config) {
             $kernel->addConfigFile($config);
         }]);
 

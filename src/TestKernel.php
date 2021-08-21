@@ -16,7 +16,7 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class AppKernel extends Kernel
+class TestKernel extends Kernel
 {
     /**
      * @var string[]
