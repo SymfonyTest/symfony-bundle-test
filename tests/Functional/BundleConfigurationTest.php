@@ -50,7 +50,7 @@ final class BundleConfigurationTest extends KernelTestCase
     public function testBundleWithDifferentConfigurationFormats($config)
     {
         $kernel = self::bootKernel(['config' => function (TestKernel $kernel) use ($config) {
-            $kernel->addConfigFile($config);
+            $kernel->addConfig($config);
         }]);
 
         $container = $kernel->getContainer();

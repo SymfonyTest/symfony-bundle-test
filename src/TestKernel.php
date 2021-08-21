@@ -58,11 +58,11 @@ class TestKernel extends Kernel
         $this->cachePrefix = uniqid('cache', true);
 
         $this->addBundle(FrameworkBundle::class);
-        $this->addConfigFile(__DIR__.'/config/framework.yml');
+        $this->addConfig(__DIR__.'/config/framework.yml');
         if (class_exists(ConfigBuilderCacheWarmer::class)) {
-            $this->addConfigFile(__DIR__.'/config/framework-53.yml');
+            $this->addConfig(__DIR__.'/config/framework-53.yml');
         } else {
-            $this->addConfigFile(__DIR__.'/config/framework-52.yml');
+            $this->addConfig(__DIR__.'/config/framework-52.yml');
         }
     }
 
@@ -77,7 +77,7 @@ class TestKernel extends Kernel
     /**
      * @param string $configFile path to config file
      */
-    public function addConfigFile($configFile)
+    public function addConfig($configFile): void
     {
         $this->configFiles[] = $configFile;
     }

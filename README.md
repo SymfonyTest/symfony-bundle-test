@@ -70,7 +70,7 @@ class BundleInitializationTest extends KernelTestCase
             $kernel->addBundle(OtherBundle::class);
 
             // Add some configuration
-            $kernel->addConfigFile(__DIR__.'/config.yml');
+            $kernel->addConfig(__DIR__.'/config.yml');
         }]);
 
         // ...
