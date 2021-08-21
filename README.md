@@ -22,19 +22,23 @@ $ composer require --dev nyholm/symfony-bundle-test
 ## Write a test
 
 ```php
-```php
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Nyholm\BundleTest\TestKernel;
 use Acme\AcmeFooBundle;
 use Acme\Service\Foo;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class BundleInitializationTest extends KernelTestCase
 {
-    protected static function createKernel(array $options = [])
-    {
-        KernelTestCase::$class = TestKernel::class;
 
+    protected static function getKernelClass(): string
+    {
+        return TestKernel::class;
+    }
+
+    protected static function createKernel(array $options = []): KernelInterface
+    {
         /**
          * @var TestKernel $kernel
          */
@@ -45,7 +49,7 @@ class BundleInitializationTest extends KernelTestCase
         return $kernel;
     }
 
-    public function testInitBundle()
+    public function testInitBundle(): void
     {
         // Boot the kernel.
         $kernel = self::bootKernel();
@@ -62,7 +66,7 @@ class BundleInitializationTest extends KernelTestCase
         $this->assertInstanceOf(Foo::class, $service);
     }
 
-    public function testBundleWithDifferentConfiguration()
+    public function testBundleWithDifferentConfiguration(): void
     {
         // Boot the kernel as normal ...
         $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){

@@ -12,10 +12,14 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class BundleInitializationTest extends KernelTestCase
 {
+
+    protected static function getKernelClass(): string
+    {
+        return TestKernel::class;
+    }
+
     protected static function createKernel(array $options = []): KernelInterface
     {
-        KernelTestCase::$class = TestKernel::class;
-
         /**
          * @var TestKernel $kernel
          */
