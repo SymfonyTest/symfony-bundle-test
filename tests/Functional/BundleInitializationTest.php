@@ -12,7 +12,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class BundleInitializationTest extends KernelTestCase
 {
-
     protected static function getKernelClass(): string
     {
         return TestKernel::class;
