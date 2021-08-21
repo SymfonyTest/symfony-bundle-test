@@ -27,7 +27,7 @@ final class BundleConfigurationTest extends KernelTestCase
         return $kernel;
     }
 
-    public function provideBundleWithDifferentConfigurationFormats()
+    public function provideBundleWithDifferentConfigurationFormats(): array
     {
         return [
             [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.yml'],
@@ -47,7 +47,7 @@ final class BundleConfigurationTest extends KernelTestCase
      *
      * @param string|callable $config
      */
-    public function testBundleWithDifferentConfigurationFormats($config)
+    public function testBundleWithDifferentConfigurationFormats($config): void
     {
         $kernel = self::bootKernel(['config' => function (TestKernel $kernel) use ($config) {
             $kernel->addConfig($config);

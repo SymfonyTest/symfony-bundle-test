@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Routing\Loader\PhpFileLoader as RoutingPhpFileLoader;
@@ -31,7 +32,7 @@ class TestKernel extends Kernel
     /**
      * @var string
      */
-    private $cachePrefix = '';
+    private $cachePrefix;
 
     /**
      * @var string|null;
@@ -67,15 +68,16 @@ class TestKernel extends Kernel
     }
 
     /**
-     * @param string $bundle
+     * @psalm-param class-string<BundleInterface> $bundleClassName
+     * @param string $bundleClassName
      */
-    public function addBundle($bundleClassName)
+    public function addBundle($bundleClassName): void
     {
         $this->bundlesToRegister[] = $bundleClassName;
     }
 
     /**
-     * @param string $configFile path to config file
+     * @param string|callable $configFile path to a config file or a callable which get the {@see ContainerBuilder} as its first argument
      */
     public function addConfig($configFile): void
     {
@@ -104,7 +106,7 @@ class TestKernel extends Kernel
     /**
      * @param string|null $projectDir
      */
-    public function setProjectDir($projectDir)
+    public function setProjectDir($projectDir): void
     {
         $this->fakedProjectDir = $projectDir;
     }
@@ -207,7 +209,7 @@ class TestKernel extends Kernel
     /**
      * @param CompilerPassInterface[] $compilerPasses
      */
-    public function addCompilerPasses(array $compilerPasses)
+    public function addCompilerPasses(array $compilerPasses): void
     {
         $this->compilerPasses = $compilerPasses;
     }
