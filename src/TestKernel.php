@@ -102,14 +102,6 @@ class TestKernel extends Kernel
     }
 
     /**
-     * @param string|null $rootDir
-     */
-    public function setRootDir($rootDir)
-    {
-        $this->rootDir = $rootDir;
-    }
-
-    /**
      * @param string|null $projectDir
      */
     public function setProjectDir($projectDir)
