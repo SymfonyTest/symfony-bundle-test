@@ -118,12 +118,10 @@ class TestKernel extends Kernel
     public function registerBundles(): iterable
     {
         $this->bundlesToRegister = array_unique($this->bundlesToRegister);
-        $bundles = [];
-        foreach ($this->bundlesToRegister as $bundle) {
-            $bundles[] = new $bundle();
-        }
 
-        return $bundles;
+        foreach ($this->bundlesToRegister as $bundle) {
+            yield new $bundle();
+        }
     }
 
     /**
