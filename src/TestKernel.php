@@ -90,12 +90,12 @@ class TestKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/NyholmBundleTest/'.$this->cachePrefix;
+        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/'.$this->cachePrefix;
     }
 
     public function getLogDir(): string
     {
-        return sys_get_temp_dir().'/NyholmBundleTest/log';
+        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/log';
     }
 
     public function getProjectDir(): string
