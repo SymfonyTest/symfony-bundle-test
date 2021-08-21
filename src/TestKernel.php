@@ -44,9 +44,9 @@ class TestKernel extends Kernel
     private $compilerPasses = [];
 
     /**
-     * @var string|null
+     * @var string[]
      */
-    private $routingFile = null;
+    private $routingFiles = [];
 
     /**
      * {@inheritDoc}
@@ -181,21 +181,17 @@ class TestKernel extends Kernel
             $collection = new RouteCollection();
             $configurator = new RoutingConfigurator($collection, $kernelLoader, $file, $file, $this->getEnvironment());
 
-            if ($this->routingFile) {
-                $configurator->import($this->routingFile);
-            } else {
-                $configurator->import(__DIR__.'/config/routing.yml');
+            foreach ($this->routingFiles as $routingFile) {
+                $configurator->import($routingFile);
             }
 
             return $collection;
         } else {
-            // Legacy
+            // Legacy symfony < 5.1
             $routes = new RouteCollectionBuilder($loader);
 
-            if ($this->routingFile) {
-                $routes->import($this->routingFile);
-            } else {
-                $routes->import(__DIR__.'/config/routing.yml');
+            foreach ($this->routingFiles as $routingFile) {
+                $routes->import($routingFile);
             }
 
             return $routes->build();
@@ -227,9 +223,9 @@ class TestKernel extends Kernel
     /**
      * @param string|null $routingFile
      */
-    public function setRoutingFile($routingFile)
+    public function addRoutingFile($routingFile): void
     {
-        $this->routingFile = $routingFile;
+        $this->routingFiles[] = $routingFile;
     }
 
     public function handleOptions(array $options): void
