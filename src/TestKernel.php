@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
  */
 class TestKernel extends Kernel
 {
-    // use MicroKernelTrait;
+    use MicroKernelTrait;
 
     /**
      * @var string[]
@@ -125,76 +126,6 @@ class TestKernel extends Kernel
     }
 
     /**
-     * (From MicroKernelTrait)
-     * {@inheritdoc}
-     */
-    public function registerContainerConfiguration(LoaderInterface $loader)
-    {
-        $loader->load(function (ContainerBuilder $container) use ($loader) {
-            $container->loadFromExtension('framework', [
-                'router' => [
-                    'resource' => 'kernel::loadRoutes',
-                    'type' => 'service',
-                ],
-            ]);
-
-            $this->configs = array_unique($this->configs, SORT_REGULAR);
-            foreach ($this->configs as $path) {
-                $loader->load($path);
-            }
-
-            $kernelClass = false !== strpos(static::class, "@anonymous\0") ? parent::class : static::class;
-
-            if (!$container->hasDefinition('kernel')) {
-                $container->register('kernel', $kernelClass)
-                    ->addTag('controller.service_arguments')
-                    ->setAutoconfigured(true)
-                    ->setSynthetic(true)
-                    ->setPublic(true)
-                ;
-            }
-
-            $kernelDefinition = $container->getDefinition('kernel');
-            $kernelDefinition->addTag('routing.route_loader');
-
-            $container->addObjectResource($this);
-        });
-    }
-
-    /**
-     * (From MicroKernelTrait).
-     *
-     * @internal
-     */
-    public function loadRoutes(LoaderInterface $loader)
-    {
-        if (class_exists(RoutingConfigurator::class)) {
-            $file = (new \ReflectionObject($this))->getFileName();
-            /** @var RoutingPhpFileLoader $kernelLoader */
-            $kernelLoader = $loader->getResolver()->resolve($file, 'php');
-            $kernelLoader->setCurrentDir(\dirname($file));
-
-            $collection = new RouteCollection();
-            $configurator = new RoutingConfigurator($collection, $kernelLoader, $file, $file, $this->getEnvironment());
-
-            foreach ($this->routingFiles as $routingFile) {
-                $configurator->import($routingFile);
-            }
-
-            return $collection;
-        } else {
-            // Legacy symfony < 5.1
-            $routes = new RouteCollectionBuilder($loader);
-
-            foreach ($this->routingFiles as $routingFile) {
-                $routes->import($routingFile);
-            }
-
-            return $routes->build();
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function buildContainer(): ContainerBuilder
@@ -228,6 +159,27 @@ class TestKernel extends Kernel
     {
         if (array_key_exists('config', $options) && is_callable($configCallable = $options['config'])) {
             $configCallable($this);
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param LoaderInterface $loader
+     */
+    protected function configureContainer($container, $loader): void
+    {
+        foreach ($this->configs as $config) {
+            $loader->load($config);
+        }
+    }
+
+    /**
+     * @param RoutingConfigurator|RouteCollectionBuilder $routes
+     */
+    protected function configureRoutes($routes): void
+    {
+        foreach ($this->routingFiles as $routingFile) {
+            $routes->import($routingFile);
         }
     }
 }
