@@ -45,7 +45,7 @@ class TestKernel extends Kernel
     private $compilerPasses = [];
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private $routingFiles = [];
 
@@ -69,6 +69,7 @@ class TestKernel extends Kernel
 
     /**
      * @psalm-param class-string<BundleInterface> $bundleClassName
+     *
      * @param string $bundleClassName
      */
     public function addBundle($bundleClassName): void
@@ -215,7 +216,7 @@ class TestKernel extends Kernel
     }
 
     /**
-     * @param string|null $routingFile
+     * @param string $routingFile
      */
     public function addRoutingFile($routingFile): void
     {
