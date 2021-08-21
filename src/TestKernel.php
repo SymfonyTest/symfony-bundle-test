@@ -4,6 +4,7 @@ namespace Nyholm\BundleTest;
 
 use Symfony\Bundle\FrameworkBundle\CacheWarmer\ConfigBuilderCacheWarmer;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,15 +20,17 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
  */
 class TestKernel extends Kernel
 {
+    // use MicroKernelTrait;
+
     /**
      * @var string[]
      */
     private $bundlesToRegister = [];
 
     /**
-     * @var array
+     * @var string[]|callable[]
      */
-    private $configFiles = [];
+    private $configs = [];
 
     /**
      * @var string
@@ -82,7 +85,7 @@ class TestKernel extends Kernel
      */
     public function addConfig($configFile): void
     {
-        $this->configFiles[] = $configFile;
+        $this->configs[] = $configFile;
     }
 
     public function getCacheDir(): string
@@ -137,8 +140,8 @@ class TestKernel extends Kernel
                 ],
             ]);
 
-            $this->configFiles = array_unique($this->configFiles, SORT_REGULAR);
-            foreach ($this->configFiles as $path) {
+            $this->configs = array_unique($this->configs, SORT_REGULAR);
+            foreach ($this->configs as $path) {
                 $loader->load($path);
             }
 
