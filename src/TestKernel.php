@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -177,6 +178,24 @@ class TestKernel extends Kernel
     {
         foreach ($this->testRoutingFiles as $routingFile) {
             $routes->import($routingFile);
+        }
+    }
+
+    public function shutdown(): void
+    {
+        parent::shutdown();
+
+        $cacheDirectory = $this->getCacheDir();
+        $logDirectory = $this->getLogDir();
+
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists($cacheDirectory)) {
+            $filesystem->remove($cacheDirectory);
+        }
+
+        if ($filesystem->exists($logDirectory)) {
+            $filesystem->remove($logDirectory);
         }
     }
 }
