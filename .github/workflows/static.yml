@@ -15,7 +15,7 @@ jobs:
         with:
           php-version: 8.0
           coverage: none
-          tools: phpstan:0.12.92, cs2pr
+          tools: phpstan:0.12.94, cs2pr
 
       - name: Download dependencies
         uses: ramsey/composer-install@v1
@@ -36,7 +36,7 @@ jobs:
         with:
           php-version: 8.0
           coverage: none
-          tools: php-cs-fixer:2.19.0, cs2pr
+          tools: php-cs-fixer:3, cs2pr
 
       - name: PHP-CS-Fixer
         run: php-cs-fixer fix --dry-run --format=checkstyle | cs2pr

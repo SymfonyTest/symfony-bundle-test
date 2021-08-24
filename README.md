@@ -5,7 +5,7 @@
 **Test if your bundle is compatible with different Symfony versions**
 
 When you want to make sure that your bundle works with different versions of Symfony
-you need to create a custom `AppKernel` and load your bundle and configuration.
+you need to create a custom `TestKernel` and load your bundle and configuration.
 
 Using this bundle test together with Matthias Nobacks's
 [SymfonyDependencyInjectionTest](https://github.com/SymfonyTest/SymfonyDependencyInjectionTest)
@@ -24,18 +24,22 @@ $ composer require --dev nyholm/symfony-bundle-test
 ```php
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Nyholm\BundleTest\AppKernel;
+use Nyholm\BundleTest\TestKernel;
 use Acme\AcmeFooBundle;
 use Acme\Service\Foo;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class BundleInitializationTest extends KernelTestCase
 {
-    protected static function createKernel(array $options = [])
+    protected static function getKernelClass(): string
     {
-        KernelTestCase::$class = AppKernel::class;
+        return TestKernel::class;
+    }
 
+    protected static function createKernel(array $options = []): KernelInterface
+    {
         /**
-         * @var AppKernel $kernel
+         * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
         $kernel->addBundle(AcmeFooBundle::class);
@@ -44,7 +48,7 @@ class BundleInitializationTest extends KernelTestCase
         return $kernel;
     }
 
-    public function testInitBundle()
+    public function testInitBundle(): void
     {
         // Boot the kernel.
         $kernel = self::bootKernel();
@@ -61,15 +65,15 @@ class BundleInitializationTest extends KernelTestCase
         $this->assertInstanceOf(Foo::class, $service);
     }
 
-    public function testBundleWithDifferentConfiguration()
+    public function testBundleWithDifferentConfiguration(): void
     {
         // Boot the kernel as normal ...
-        $kernel = self::bootKernel(['config' => static function(AppKernel $kernel){
+        $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){
             // Add some other bundles we depend on
             $kernel->addBundle(OtherBundle::class);
 
             // Add some configuration
-            $kernel->addConfigFile(__DIR__.'/config.yml');
+            $kernel->addConfig(__DIR__.'/config.yml');
         }]);
 
         // ...

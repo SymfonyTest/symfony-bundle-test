@@ -2,7 +2,7 @@
 
 namespace Nyholm\BundleTest\Tests\Functional;
 
-use Nyholm\BundleTest\AppKernel;
+use Nyholm\BundleTest\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -12,12 +12,15 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class BundleInitializationTest extends KernelTestCase
 {
+    protected static function getKernelClass(): string
+    {
+        return TestKernel::class;
+    }
+
     protected static function createKernel(array $options = []): KernelInterface
     {
-        KernelTestCase::$class = AppKernel::class;
-
         /**
-         * @var AppKernel $kernel
+         * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
         $kernel->addBundle(FrameworkBundle::class);
@@ -25,7 +28,7 @@ class BundleInitializationTest extends KernelTestCase
         return $kernel;
     }
 
-    public function testRegisterBundle()
+    public function testRegisterBundle(): void
     {
         $kernel = self::bootKernel();
         $container = $kernel->getContainer();

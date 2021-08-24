@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
  */
 final class ConfigurationExtension extends ConfigurableExtension
 {
-    protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
+    protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
         $container->setParameter('app.foo', $mergedConfig['foo']);
         $container->setParameter('app.bar', $mergedConfig['bar']);
