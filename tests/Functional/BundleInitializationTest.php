@@ -23,7 +23,7 @@ class BundleInitializationTest extends KernelTestCase
          * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
-        $kernel->addBundle(FrameworkBundle::class);
+        $kernel->addTestBundle(FrameworkBundle::class);
 
         return $kernel;
     }

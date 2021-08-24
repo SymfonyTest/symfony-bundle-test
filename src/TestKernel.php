@@ -23,32 +23,32 @@ class TestKernel extends Kernel
     /**
      * @var string[]
      */
-    private $bundlesToRegister = [];
+    private $testBundle = [];
 
     /**
      * @var string[]|callable[]
      */
-    private $configs = [];
+    private $testConfigs = [];
 
     /**
      * @var string
      */
-    private $cachePrefix;
+    private $testCachePrefix;
 
     /**
      * @var string|null;
      */
-    private $fakedProjectDir;
+    private $testProjectDir;
 
     /**
      * @var CompilerPassInterface[]
      */
-    private $compilerPasses = [];
+    private $testCompilerPasses = [];
 
     /**
      * @var array<int, string>
      */
-    private $routingFiles = [];
+    private $testRoutingFiles = [];
 
     /**
      * {@inheritDoc}
@@ -57,14 +57,14 @@ class TestKernel extends Kernel
     {
         parent::__construct($environment, $debug);
 
-        $this->cachePrefix = uniqid('cache', true);
+        $this->testCachePrefix = uniqid('cache', true);
 
-        $this->addBundle(FrameworkBundle::class);
-        $this->addConfig(__DIR__.'/config/framework.yml');
+        $this->addTestBundle(FrameworkBundle::class);
+        $this->addTestConfig(__DIR__.'/config/framework.yml');
         if (class_exists(ConfigBuilderCacheWarmer::class)) {
-            $this->addConfig(__DIR__.'/config/framework-53.yml');
+            $this->addTestConfig(__DIR__.'/config/framework-53.yml');
         } else {
-            $this->addConfig(__DIR__.'/config/framework-52.yml');
+            $this->addTestConfig(__DIR__.'/config/framework-52.yml');
         }
     }
 
@@ -73,22 +73,22 @@ class TestKernel extends Kernel
      *
      * @param string $bundleClassName
      */
-    public function addBundle($bundleClassName): void
+    public function addTestBundle($bundleClassName): void
     {
-        $this->bundlesToRegister[] = $bundleClassName;
+        $this->testBundle[] = $bundleClassName;
     }
 
     /**
      * @param string|callable $configFile path to a config file or a callable which get the {@see ContainerBuilder} as its first argument
      */
-    public function addConfig($configFile): void
+    public function addTestConfig($configFile): void
     {
-        $this->configs[] = $configFile;
+        $this->testConfigs[] = $configFile;
     }
 
     public function getCacheDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/'.$this->cachePrefix;
+        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/'.$this->testCachePrefix;
     }
 
     public function getLogDir(): string
@@ -98,26 +98,26 @@ class TestKernel extends Kernel
 
     public function getProjectDir(): string
     {
-        if (null === $this->fakedProjectDir) {
+        if (null === $this->testProjectDir) {
             return realpath(__DIR__.'/../../../../');
         }
 
-        return $this->fakedProjectDir;
+        return $this->testProjectDir;
     }
 
     /**
      * @param string|null $projectDir
      */
-    public function setProjectDir($projectDir): void
+    public function setTestProjectDir($projectDir): void
     {
-        $this->fakedProjectDir = $projectDir;
+        $this->testProjectDir = $projectDir;
     }
 
     public function registerBundles(): iterable
     {
-        $this->bundlesToRegister = array_unique($this->bundlesToRegister);
+        $this->testBundle = array_unique($this->testBundle);
 
-        foreach ($this->bundlesToRegister as $bundle) {
+        foreach ($this->testBundle as $bundle) {
             yield new $bundle();
         }
     }
@@ -129,7 +129,7 @@ class TestKernel extends Kernel
     {
         $container = parent::buildContainer();
 
-        foreach ($this->compilerPasses as $pass) {
+        foreach ($this->testCompilerPasses as $pass) {
             $container->addCompilerPass($pass);
         }
 
@@ -139,17 +139,17 @@ class TestKernel extends Kernel
     /**
      * @param CompilerPassInterface $compilerPasses
      */
-    public function addCompilerPass($compilerPasses): void
+    public function addTestCompilerPass($compilerPasses): void
     {
-        $this->compilerPasses[] = $compilerPasses;
+        $this->testCompilerPasses[] = $compilerPasses;
     }
 
     /**
      * @param string $routingFile
      */
-    public function addRoutingFile($routingFile): void
+    public function addTestRoutingFile($routingFile): void
     {
-        $this->routingFiles[] = $routingFile;
+        $this->testRoutingFiles[] = $routingFile;
     }
 
     public function handleOptions(array $options): void
@@ -165,7 +165,7 @@ class TestKernel extends Kernel
      */
     protected function configureContainer($container, $loader): void
     {
-        foreach ($this->configs as $config) {
+        foreach ($this->testConfigs as $config) {
             $loader->load($config);
         }
     }
@@ -175,7 +175,7 @@ class TestKernel extends Kernel
      */
     protected function configureRoutes($routes): void
     {
-        foreach ($this->routingFiles as $routingFile) {
+        foreach ($this->testRoutingFiles as $routingFile) {
             $routes->import($routingFile);
         }
     }
