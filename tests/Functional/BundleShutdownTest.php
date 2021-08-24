@@ -17,17 +17,6 @@ class BundleShutdownTest extends KernelTestCase
         return TestKernel::class;
     }
 
-    protected static function createKernel(array $options = []): KernelInterface
-    {
-        /**
-         * @var TestKernel $kernel
-         */
-        $kernel = parent::createKernel($options);
-        $kernel->addBundle(FrameworkBundle::class);
-
-        return $kernel;
-    }
-
     public function testCleanupTemporaryDirectories(): void
     {
         $kernel = self::bootKernel();
