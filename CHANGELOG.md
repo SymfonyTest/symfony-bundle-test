@@ -2,6 +2,32 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 2.0.0
+
+### Added
+
+- Support for multiple routing files via `TestKernel::addRoutingFile`
+- Support for a fully functional symfony kernel with the usage of the `Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait`
+
+### Removed
+
+- `AppKernel::setRootDir`
+
+### Changed
+
+- Signature of `TestKernel::addTestCompilerPass` to accept a single CompilerPass instead of an array
+- Renamed `AppKernel` to `TestKernel`
+- Renamed `TestKernel::addBundle` to `TestKernel::addTestBundle`
+- Renamed `TestKernel::addCompilerPasses` to `TestKernel::addTestCompilerPass`
+- Renamed `TestKernel::setRoutingFile` to `TestKernel::addTestRoutingFile`
+- Renamed `TestKernel::addConfigFile` to `TestKernel::addTestConfig`
+- Renamed `TestKernel::setProjectDir` to `TestKernel::setTestProjectDir`
+- Renamed private properties
+
+### Fixed
+
+- Usage of `sys_get_temp_dir` in `TestKernel::getCacheDir` and `TestKernel::getLogDir` directory
+
 ## 1.8.1
 
 ### Fixed
