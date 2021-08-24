@@ -24,7 +24,7 @@ final class BundleConfigurationTest extends KernelTestCase
          * @var TestKernel $kernel
          */
         $kernel = parent::createKernel($options);
-        $kernel->addBundle(ConfigurationBundle::class);
+        $kernel->addTestBundle(ConfigurationBundle::class);
         $kernel->handleOptions($options);
 
         return $kernel;
@@ -53,7 +53,7 @@ final class BundleConfigurationTest extends KernelTestCase
     public function testBundleWithDifferentConfigurationFormats($config): void
     {
         $kernel = self::bootKernel(['config' => function (TestKernel $kernel) use ($config) {
-            $kernel->addConfig($config);
+            $kernel->addTestConfig($config);
         }]);
 
         $container = $kernel->getContainer();
