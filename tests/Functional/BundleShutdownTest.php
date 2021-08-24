@@ -3,9 +3,7 @@
 namespace Nyholm\BundleTest\Tests\Functional;
 
 use Nyholm\BundleTest\TestKernel;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @author Jason Schilling <jason@sourecode.dev>
