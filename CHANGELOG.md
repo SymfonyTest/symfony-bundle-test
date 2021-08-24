@@ -2,6 +2,12 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 2.0.0
+
+### Added
+
+- Cleanup of the cache and log directory after kernel shutdown
+
 ## 1.8.1
 
 ### Fixed
