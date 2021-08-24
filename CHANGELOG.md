@@ -8,6 +8,7 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 
 - Support for multiple routing files via `TestKernel::addRoutingFile`
 - Support for a fully functional symfony kernel with the usage of the `Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait`
+- Cleanup of the cache and log directory after kernel shutdown
 
 ### Removed
 

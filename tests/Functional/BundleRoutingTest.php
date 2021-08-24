@@ -29,7 +29,7 @@ class BundleRoutingTest extends KernelTestCase
     {
         $kernel = self::bootKernel([
             'config' => static function (TestKernel $kernel) {
-                $kernel->addRoutingFile(__DIR__.'/../Fixtures/Resources/Routing/routes.yml');
+                $kernel->addTestRoutingFile(__DIR__.'/../Fixtures/Resources/Routing/routes.yml');
             },
         ]);
 
