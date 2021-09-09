@@ -8,6 +8,8 @@ jobs:
     strategy:
       matrix:
         php:
+          - '5.5'
+          - '5.6'
           - '7.2'
           - '7.3'
           - '7.4'
@@ -77,4 +79,4 @@ jobs:
         run: composer validate --strict --no-check-lock
 
       - name: Run tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/simple-phpunit
