@@ -2,6 +2,13 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 1.9.0
+
+### Fixed
+
+- Remove support for Symfony 3
+- Remove support for PHP 5
+
 ## 1.8.2
 
 ### Fixed
