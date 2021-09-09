@@ -2,6 +2,12 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 1.8.2
+
+### Fixed
+
+- Make sure we are still compatible with PHP 5
+
 ## 1.8.1
 
 ### Fixed
