@@ -85,7 +85,7 @@ abstract class BaseBundleTestCase extends TestCase
      */
     public function ensureKernelShutdown()
     {
-        if (null !== $this->kernel) {
+        if (null !== $this->kernel && $this->kernel->isBooted()) {
             try {
                 $container = $this->kernel->getContainer();
             } catch (\LogicException $e) {
