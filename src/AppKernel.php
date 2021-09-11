@@ -230,4 +230,12 @@ class AppKernel extends Kernel
     {
         $this->routingFile = $routingFile;
     }
+
+    /**
+     * @return bool
+     */
+    public function isBooted()
+    {
+        return $this->booted;
+    }
 }

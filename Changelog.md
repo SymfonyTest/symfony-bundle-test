@@ -8,6 +8,7 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 
 - Remove support for Symfony 3
 - Remove support for PHP 5
+- Skip logic for not booted kernel in `ensureKernelShutdown`
 
 ## 1.8.2
 
