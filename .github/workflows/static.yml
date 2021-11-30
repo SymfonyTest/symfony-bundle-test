@@ -15,7 +15,7 @@ jobs:
         with:
           php-version: 8.0
           coverage: none
-          tools: phpstan:0.12.94, cs2pr
+          tools: phpstan:1.2.0, cs2pr
 
       - name: Download dependencies
         uses: ramsey/composer-install@v1
