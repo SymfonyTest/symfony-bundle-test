@@ -11,11 +11,11 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0 || ^8.1",
-        "symfony/dependency-injection": "^4.4 || ^5.3 || ^6.0 || ^6.1",
-        "symfony/filesystem": "^4.4 || ^5.3 || ^6.0 || ^6.1",
-        "symfony/framework-bundle": "^4.4 || ^5.3 || ^6.0 || ^6.1",
-        "symfony/http-kernel": "^4.4 || ^5.3 || ^6.0 || ^6.1",
-        "symfony/yaml": "^4.4 || ^5.3 || ^6.0 || ^6.1"
+        "symfony/dependency-injection": "^4.4 || ^5.3 || ^6.0",
+        "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
+        "symfony/framework-bundle": "^4.4 || ^5.3 || ^6.0",
+        "symfony/http-kernel": "^4.4 || ^5.3 || ^6.0",
+        "symfony/yaml": "^4.4 || ^5.3 || ^6.0"
     },
     "conflict": {
         "phpunit/phpunit": "<=8.5.14"
