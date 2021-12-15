@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
+  <file src="src/TestKernel.php">
+    <UndefinedDocblockClass occurrences="1">
+      <code>RoutingConfigurator|RouteCollectionBuilder</code>
+    </UndefinedDocblockClass>
+  </file>
   <file src="src/config/parameters.php">
     <UndefinedGlobalVariable occurrences="3">
       <code>$container</code>

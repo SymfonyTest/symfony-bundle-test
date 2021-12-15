@@ -1,7 +1,17 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Comparison operation \"\\>\\=\" between 50306 and 50100 is always true\\.$#"
+			message: "#^Call to method import\\(\\) on an unknown class Symfony\\\\Component\\\\Routing\\\\RouteCollectionBuilder\\.$#"
+			count: 1
+			path: src/TestKernel.php
+
+		-
+			message: "#^Parameter \\$routes of method Nyholm\\\\BundleTest\\\\TestKernel\\:\\:configureRoutes\\(\\) has invalid type Symfony\\\\Component\\\\Routing\\\\RouteCollectionBuilder\\.$#"
+			count: 1
+			path: src/TestKernel.php
+
+		-
+			message: "#^Comparison operation \"\\>\\=\" between 60001 and 50100 is always true\\.$#"
 			count: 1
 			path: src/config/parameters.php
 
