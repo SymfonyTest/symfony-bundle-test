@@ -181,9 +181,13 @@ class TestKernel extends Kernel
         }
     }
 
-    public function shutdown(): void
+    public function shutdown($clearCache = true): void
     {
         parent::shutdown();
+
+        if (!$clearCache) {
+            return;
+        }
 
         $cacheDirectory = $this->getCacheDir();
         $logDirectory = $this->getLogDir();
