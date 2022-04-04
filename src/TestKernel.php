@@ -188,7 +188,7 @@ class TestKernel extends Kernel
         }
     }
 
-    public function shutdown($clearCache = true): void
+    public function shutdown(): void
     {
         parent::shutdown();
 
