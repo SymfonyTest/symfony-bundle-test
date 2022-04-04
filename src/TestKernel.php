@@ -52,6 +52,13 @@ class TestKernel extends Kernel
     private $testRoutingFiles = [];
 
     /**
+     * Internal config.
+     *
+     * @var bool
+     */
+    private $clearCache = true;
+
+    /**
      * {@inheritDoc}
      */
     public function __construct(string $environment, bool $debug)
@@ -185,6 +192,10 @@ class TestKernel extends Kernel
     {
         parent::shutdown();
 
+        if (!$this->clearCache) {
+            return;
+        }
+
         $cacheDirectory = $this->getCacheDir();
         $logDirectory = $this->getLogDir();
 
@@ -197,5 +208,10 @@ class TestKernel extends Kernel
         if ($filesystem->exists($logDirectory)) {
             $filesystem->remove($logDirectory);
         }
+    }
+
+    public function setClearCacheAfterShutdown(bool $clearCache): void
+    {
+        $this->clearCache = $clearCache;
     }
 }
