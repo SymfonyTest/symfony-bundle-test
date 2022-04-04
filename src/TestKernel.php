@@ -52,7 +52,8 @@ class TestKernel extends Kernel
     private $testRoutingFiles = [];
 
     /**
-     * Internal config
+     * Internal config.
+     *
      * @var bool
      */
     private $clearCache = true;
