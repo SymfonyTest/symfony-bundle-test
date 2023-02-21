@@ -102,8 +102,8 @@ jobs:
     strategy:
       matrix:
         operating-system: [ ubuntu-latest, windows-latest ]
-        php: [ '7.4', '8.0', '8.1' ]
-        symfony: ['4.4.*', '5.3.*', '5.4.*', '6.0.*', '6.1.*']
+        php: [ '7.4', '8.0', '8.1', '8.2' ]
+        symfony: ['4.4.*', '5.4.*', '6.0.*', '6.1.*', '6.2.*']
 
     steps:
       - uses: actions/checkout@v4
