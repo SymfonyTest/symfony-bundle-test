@@ -15,6 +15,7 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 ### Removed
 
 - `AppKernel::setRootDir`
+- `BaseBundleTestCase`. Instead extend the `KernelTestCase` from Symfony directly
 
 ### Changed
 
