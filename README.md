@@ -82,6 +82,44 @@ class BundleInitializationTest extends KernelTestCase
 
 ```
 
+## Test unused private services
+By default Symfony removes private services that are not used (this is also the behaviour in the test container). If you want to test your private services anyway, here is a method for doing that:
+
+```php
+class BundleInitializationTest extends KernelTestCase
+{
+    // ...
+
+    protected static function createKernel(array $options = []): KernelInterface
+    {
+        // ...
+        
+        $kernel->addTestCompilerPass(new class() implements CompilerPassInterface {
+            public function process(ContainerBuilder $container): void
+            {
+                foreach ($container->getDefinitions() as $id => $definition) {
+                    if (stripos($id, 'your_namespace') === 0) {
+                        $definition->setPublic(true);
+                    }
+                }
+
+                foreach ($container->getAliases() as $id => $alias) {
+                    if (stripos($id, 'your_namespace') === 0) {
+                        $alias->setPublic(true);
+                    }
+                }
+            }
+        });
+
+        // ...
+    }
+    
+    // ...
+}
+```
+
+This compiler pass will mark all services that starts with `your_namespace` (case insensitive) as public and hence they won't be removed.
+
 ## Configure Github Actions
 
 You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
