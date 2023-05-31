@@ -66,15 +66,15 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Setup PHP
-        uses: shivammathur/setup-php@v3
+        uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
           coverage: none
           tools: composer-normalize
-
-      - name: Checkout code
-        uses: actions/checkout@v2
 
       - name: Normalize
         run: composer-normalize --dry-run
