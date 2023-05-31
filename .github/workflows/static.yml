@@ -4,11 +4,11 @@ name: Static analysis
 jobs:
   phpstan:
     name: PHPStan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -25,11 +25,11 @@ jobs:
 
   php-cs-fixer:
     name: PHP-CS-Fixer
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -43,10 +43,10 @@ jobs:
 
   psalm:
     name: Psalm
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -63,18 +63,18 @@ jobs:
 
   composer-normalize:
     name: Composer Normalize
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
           coverage: none
           tools: composer-normalize
-
-      - name: Checkout code
-        uses: actions/checkout@v2
 
       - name: Normalize
         run: composer-normalize --dry-run
