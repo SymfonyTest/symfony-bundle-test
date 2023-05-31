@@ -4,7 +4,7 @@ on: [ pull_request ]
 jobs:
   tests:
     name: PHPUnit PHP ${{ matrix.php }} ${{ matrix.dependency }} (Symfony ${{ matrix.symfony }})
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         php:
@@ -47,9 +47,6 @@ jobs:
             symfony: '4.4.*'
           - php: '8.0'
             symfony: '6.3.*'
-          - php: '8.0'
-            symfony: '6.3.*'
-            dependency: 'lowest'
           - php: '8.1'
             symfony: '4.4.*'
             dependency: 'lowest'
@@ -65,7 +62,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -77,16 +74,12 @@ jobs:
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.symfony }}"
 
-      - name: Prefer unstable Composer dependencies if Symfony 6.1
-        if: matrix.symfony == '6.1.*'
-        run: composer config prefer-stable false
-
       - name: Get Composer Cache Directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
