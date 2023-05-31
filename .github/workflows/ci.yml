@@ -12,28 +12,32 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
+          - '8.1'
+          - '8.2'
         dependency:
           - ''
           - 'lowest'
         symfony:
           - '4.4.*'
-          - '5.3.*'
-          - '6.0.*'
+          - '5.4.*'
+          - '6.3.*'
         exclude:
           - php: '7.2'
             symfony: '4.4.*'
             dependency: 'lowest'
           - php: '7.2'
-            symfony: '6.0.*'
+            symfony: '6.3.*'
           - php: '7.3'
             symfony: '4.4.*'
           - php: '7.3'
-            symfony: '6.0.*'
+            symfony: '6.3.*'
           - php: '7.4'
             symfony: '4.4.*'
           - php: '7.4'
-            symfony: '6.0.*'
+            symfony: '6.3.*'
           - php: '8.0'
+            symfony: '6.3.*'
+          - php: '8.2'
             symfony: '4.4.*'
       fail-fast: false
     steps:
@@ -49,10 +53,6 @@ jobs:
 
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.symfony }}"
-
-      - name: Prefer unstable Composer dependencies if Symfony 6.0
-        if: matrix.symfony == '6.0.*'
-        run: composer config prefer-stable false
 
       - name: Get Composer Cache Directory
         id: composer-cache
