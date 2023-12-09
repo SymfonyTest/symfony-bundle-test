@@ -12,9 +12,6 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 
 - Drop support for Symfony 4.4
 - Drop support for Symfony 5.3
-- Drop support for Symfony 6.0
-- Drop support for Symfony 6.1
-- Drop support for Symfony 6.2
 
 ## 2.0.0
 
