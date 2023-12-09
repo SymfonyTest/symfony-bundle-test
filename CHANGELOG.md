@@ -2,6 +2,17 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 3.0.0
+
+### Added
+
+- Support for Symfony 7.0
+
+### Removed
+
+- Drop support for Symfony 4.4
+- Drop support for Symfony 5.3
+
 ## 2.0.0
 
 ### Added

@@ -2,7 +2,6 @@
 
 namespace Nyholm\BundleTest;
 
-use Symfony\Bundle\FrameworkBundle\CacheWarmer\ConfigBuilderCacheWarmer;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -66,11 +65,6 @@ class TestKernel extends Kernel
 
         $this->addTestBundle(FrameworkBundle::class);
         $this->addTestConfig(__DIR__.'/config/framework.yml');
-        if (class_exists(ConfigBuilderCacheWarmer::class)) {
-            $this->addTestConfig(__DIR__.'/config/framework-53.yml');
-        } else {
-            $this->addTestConfig(__DIR__.'/config/framework-52.yml');
-        }
     }
 
     /**
