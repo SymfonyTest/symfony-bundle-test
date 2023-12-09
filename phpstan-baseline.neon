@@ -11,7 +11,7 @@ parameters:
 			path: src/TestKernel.php
 
 		-
-			message: "#^Comparison operation \"\\>\\=\" between 600.. and 50100 is always true\\.$#"
+			message: "#^Comparison operation \"\\>\\=\" between 50433.. and 50100 is always true\\.$#"
 			count: 1
 			path: src/config/parameters.php
 
