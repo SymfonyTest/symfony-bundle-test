@@ -106,7 +106,7 @@ jobs:
         symfony: ['4.4.*', '5.3.*', '5.4.*', '6.0.*', '6.1.*']
 
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
@@ -117,7 +117,7 @@ jobs:
       - name: Download dependencies
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony }}
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
         run: ./vendor/bin/phpunit

@@ -58,9 +58,6 @@ class TestKernel extends Kernel
      */
     private $clearCache = true;
 
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
@@ -130,9 +127,6 @@ class TestKernel extends Kernel
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildContainer(): ContainerBuilder
     {
         $container = parent::buildContainer();
