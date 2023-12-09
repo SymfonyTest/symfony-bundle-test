@@ -101,9 +101,40 @@ jobs:
     name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
     strategy:
       matrix:
-        operating-system: [ ubuntu-latest, windows-latest ]
-        php: [ '7.4', '8.0', '8.1', '8.2' ]
-        symfony: ['4.4.*', '5.4.*', '6.0.*', '6.1.*', '6.2.*']
+        operating-system: [ 'ubuntu-22.04', 'windows-2022' ]
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3' ]
+        symfony: ['5.4.*', '6.4.*', '7.0.*']
+        exclude:
+        - php: '7.4'
+          symfony: '6.4.*'
+          operating-system: 'ubuntu-22.04'
+        - php: '8.0'
+          symfony: '6.4.*'
+          operating-system: 'ubuntu-22.04'
+        - php: '7.4'
+          symfony: '7.0.*'
+          operating-system: 'ubuntu-22.04'
+        - php: '8.0'
+          symfony: '7.0.*'
+          operating-system: 'ubuntu-22.04'
+        - php: '8.1'
+          symfony: '7.0.*'
+          operating-system: 'ubuntu-22.04'
+        - php: '7.4'
+          symfony: '6.4.*'
+          operating-system: 'windows-2022'
+        - php: '8.0'
+          symfony: '6.4.*'
+          operating-system: 'windows-2022'
+        - php: '7.4'
+          symfony: '7.0.*'
+          operating-system: 'windows-2022'
+        - php: '8.0'
+          symfony: '7.0.*'
+          operating-system: 'windows-2022'
+        - php: '8.1'
+          symfony: '7.0.*'
+          operating-system: 'windows-2022'
 
     steps:
       - uses: actions/checkout@v4
