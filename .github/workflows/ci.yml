@@ -13,41 +13,25 @@ jobs:
           - '7.4'
           - '8.0'
           - '8.1'
+          - '8.2'
+          - '8.3'
         dependency:
           - ''
           - 'lowest'
         symfony:
-          - '4.4.*'
-          - '5.3.*'
           - '5.4.*'
-          - '6.0.*'
-          - '6.1.*'
+          - '6.3.*'
           - '6.4.*'
           - '7.0.*'
         exclude:
           - php: '7.2'
-            symfony: '4.4.*'
-            dependency: 'lowest'
-          - php: '7.2'
-            symfony: '6.0.*'
-          - php: '7.2'
-            symfony: '6.1.*'
+            symfony: '6.3.*'
           - php: '7.3'
-            symfony: '4.4.*'
-          - php: '7.3'
-            symfony: '6.0.*'
-          - php: '7.3'
-            symfony: '6.1.*'
+            symfony: '6.3.*'
           - php: '7.4'
-            symfony: '4.4.*'
-          - php: '7.4'
-            symfony: '6.0.*'
-          - php: '7.4'
-            symfony: '6.1.*'
+            symfony: '6.3.*'
           - php: '8.0'
-            symfony: '4.4.*'
-          - php: '8.0'
-            symfony: '6.1.*'
+            symfony: '6.3.*'
           - php: '7.2'
             symfony: '6.4.*'
           - php: '7.3'
@@ -66,15 +50,6 @@ jobs:
             symfony: '7.0.*'
           - php: '8.1'
             symfony: '7.0.*'
-          - php: '8.0'
-            symfony: '6.1.*'
-            dependency: 'lowest'
-          - php: '8.1'
-            symfony: '4.4.*'
-            dependency: 'lowest'
-          - php: '8.1'
-            symfony: '5.3.*'
-            dependency: 'lowest'
       fail-fast: false
     steps:
       - name: Checkout
@@ -89,10 +64,6 @@ jobs:
 
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.symfony }}"
-
-      - name: Prefer unstable Composer dependencies if Symfony 6.1
-        if: matrix.symfony == '6.1.*'
-        run: composer config prefer-stable false
 
       - name: Get Composer Cache Directory
         id: composer-cache
