@@ -5,7 +5,7 @@ if (!class_exists('Doctrine\Common\Annotations\Annotation')) {
     $container->loadFromExtension('framework', [
         'annotations' => ['enabled' => false],
     ]);
-} else {
+} elseif (method_exists('Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension', 'registerAnnotationsConfiguration')) {
     $container->loadFromExtension('framework', [
         'annotations' => ['cache' => 'none'],
     ]);
