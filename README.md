@@ -11,6 +11,16 @@ Using this bundle test together with Matthias Nobacks's
 [SymfonyDependencyInjectionTest](https://github.com/SymfonyTest/SymfonyDependencyInjectionTest)
 will give you a good base for testing a Symfony bundle.
 
+## Support
+
+Currently supported PHP and Symfony Versions.
+
+| Branch | PHP Version             | Symfony Version | Supported |
+|--------|-------------------------|-----------------|-----------|
+| 2.x    | 7.2 - 8.3               | 4.4, 6.3 - 6.4  | Yes       |
+
+Please always try to update to the latest version of this package before reporting an issue.
+
 ## Install
 
 Via Composer
