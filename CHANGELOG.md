@@ -2,6 +2,13 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 2.1.0
+
+### Added
+
+- Support for Symfony 6.2, 6.3 and 6.4
+- Support for PHP 8.2 and 8.3
+
 ## 2.0.0
 
 ### Added
