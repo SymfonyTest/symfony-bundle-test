@@ -13,6 +13,14 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 - Drop support for Symfony 4.4
 - Drop support for Symfony 5.3
 
+## 2.1.0
+
+### Added
+
+- Support for Symfony 6.2, 6.3 and 6.4
+- Support for PHP 8.2 and 8.3
+- Allow to set type and priority for compiler passes in `TestKernel::addTestCompilerPass`
+
 ## 2.0.0
 
 ### Added
