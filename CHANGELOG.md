@@ -8,7 +8,7 @@ The change log describes what is "Added", "Removed", "Changed" or "Fixed" betwee
 
 - Support for Symfony 6.2, 6.3 and 6.4
 - Support for PHP 8.2 and 8.3
-- Allow to set priority for compiler passes in `TestKernel::addTestCompilerPass`
+- Allow to set type and priority for compiler passes in `TestKernel::addTestCompilerPass`
 
 ## 2.0.0
 

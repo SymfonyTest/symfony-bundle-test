@@ -7,6 +7,7 @@ use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\ConfigurationBundle;
 use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\DependencyInjection\Compiler\DeRegisterSomethingPass;
 use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\DependencyInjection\Compiler\RegisterSomethingPass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -80,7 +81,7 @@ final class BundleConfigurationTest extends KernelTestCase
         // CASE 2: Compiler pass with priority, should be prioritized by priority
         $kernel = self::bootKernel(['config' => function (TestKernel $kernel) {
             $kernel->addTestConfig(__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.php');
-            $kernel->addTestCompilerPass(new DeRegisterSomethingPass(), -5);
+            $kernel->addTestCompilerPass(new DeRegisterSomethingPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -5);
             $kernel->addTestCompilerPass(new RegisterSomethingPass());
         }]);
 

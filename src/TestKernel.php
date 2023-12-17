@@ -43,7 +43,7 @@ class TestKernel extends Kernel
     private $testProjectDir;
 
     /**
-     * @var array{CompilerPassInterface, int}[]
+     * @var array{CompilerPassInterface, string, int}[]
      */
     private $testCompilerPasses = [];
 
@@ -133,7 +133,7 @@ class TestKernel extends Kernel
         $container = parent::buildContainer();
 
         foreach ($this->testCompilerPasses as $compilerPass) {
-            $container->addCompilerPass($compilerPass[0], PassConfig::TYPE_BEFORE_OPTIMIZATION, $compilerPass[1]);
+            $container->addCompilerPass($compilerPass[0], $compilerPass[1], $compilerPass[2]);
         }
 
         return $container;
@@ -141,10 +141,14 @@ class TestKernel extends Kernel
 
     /**
      * @param CompilerPassInterface $compilerPass
+     * @param string                $type
+     * @param int                   $priority
+     *
+     * @psalm-param PassConfig::TYPE_* $type
      */
-    public function addTestCompilerPass($compilerPass, $priority = 0): void
+    public function addTestCompilerPass($compilerPass, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0): void
     {
-        $this->testCompilerPasses[] = [$compilerPass, $priority];
+        $this->testCompilerPasses[] = [$compilerPass, $type, $priority];
     }
 
     /**
