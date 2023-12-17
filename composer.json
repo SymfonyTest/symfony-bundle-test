@@ -3,7 +3,9 @@
     "description": "",
     "license": "MIT",
     "type": "library",
-    "keywords": ["testing"],
+    "keywords": [
+        "testing"
+    ],
     "authors": [
         {
             "name": "Tobias Nyholm",
