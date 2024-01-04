@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -41,7 +42,7 @@ class TestKernel extends Kernel
     private $testProjectDir;
 
     /**
-     * @var CompilerPassInterface[]
+     * @var array{CompilerPassInterface, string, int}[]
      */
     private $testCompilerPasses = [];
 
@@ -125,19 +126,23 @@ class TestKernel extends Kernel
     {
         $container = parent::buildContainer();
 
-        foreach ($this->testCompilerPasses as $pass) {
-            $container->addCompilerPass($pass);
+        foreach ($this->testCompilerPasses as $compilerPass) {
+            $container->addCompilerPass($compilerPass[0], $compilerPass[1], $compilerPass[2]);
         }
 
         return $container;
     }
 
     /**
-     * @param CompilerPassInterface $compilerPasses
+     * @param CompilerPassInterface $compilerPass
+     * @param string                $type
+     * @param int                   $priority
+     *
+     * @psalm-param PassConfig::TYPE_* $type
      */
-    public function addTestCompilerPass($compilerPasses): void
+    public function addTestCompilerPass($compilerPass, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0): void
     {
-        $this->testCompilerPasses[] = $compilerPasses;
+        $this->testCompilerPasses[] = [$compilerPass, $type, $priority];
     }
 
     /**
