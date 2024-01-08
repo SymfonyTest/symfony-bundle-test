@@ -17,7 +17,8 @@ Currently supported PHP and Symfony Versions.
 
 | Branch | PHP Version             | Symfony Version | Supported |
 |--------|-------------------------|-----------------|-----------|
-| 2.x    | 7.2 - 8.3               | 4.4, 6.3 - 6.4  | Yes       |
+| master | 7.2+, 8.0+              | 5.4, 6.0+, 7.0+ | Yes       |
+| 2.x    | 7.2+, 8.0+              | 4.4, 6.3 - 6.4  | no        |
 
 Please always try to update to the latest version of this package before reporting an issue.
 
