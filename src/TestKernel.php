@@ -183,6 +183,17 @@ class TestKernel extends Kernel
 
     public function shutdown(): void
     {
+        if ($this->booted && $this->clearCache) {
+            // KernelTestCase wants the services_resetter service to be instantiated as part of
+            // its resetting in `ensureKernelShutdown`. However, if we clear the cache, the
+            // compiled container will break when trying to load the file containing the compiled
+            // code for that service as we would have deleted it already.
+            // This runs before calling the parent method so that the container is still available.
+            if ($this->container->has('services_resetter')) {
+                $this->container->get('services_resetter')->reset();
+            }
+        }
+        
         parent::shutdown();
 
         if (!$this->clearCache) {
