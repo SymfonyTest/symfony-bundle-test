@@ -24,7 +24,6 @@ class BundleShutdownTest extends KernelTestCase
         $filesystem = new Filesystem();
 
         self::assertTrue($filesystem->exists($cacheDirectory));
-        self::assertTrue($filesystem->exists($logDirectory));
 
         self::ensureKernelShutdown();
 

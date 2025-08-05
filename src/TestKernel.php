@@ -69,9 +69,9 @@ class TestKernel extends Kernel
     }
 
     /**
-     * @psalm-param class-string<BundleInterface> $bundleClassName
-     *
      * @param string $bundleClassName
+     *
+     * @psalm-param class-string<BundleInterface> $bundleClassName
      */
     public function addTestBundle($bundleClassName): void
     {
