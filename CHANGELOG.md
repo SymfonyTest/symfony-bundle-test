@@ -2,6 +2,12 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## 3.1.0
+
+### Added
+
+- Support for Symfony 8.0
+
 ## 3.0.0
 
 ### Added
