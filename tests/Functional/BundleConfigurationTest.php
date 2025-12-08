@@ -9,6 +9,7 @@ use Nyholm\BundleTest\Tests\Fixtures\ConfigurationBundle\DependencyInjection\Com
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -37,7 +38,6 @@ final class BundleConfigurationTest extends KernelTestCase
     {
         return [
             [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.yml'],
-            [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.xml'],
             [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.php'],
             [function (ContainerBuilder $container) {
                 $container->loadFromExtension('configuration', [
@@ -46,6 +46,12 @@ final class BundleConfigurationTest extends KernelTestCase
                 ]);
             }],
         ];
+
+        if (class_exists(XmlFileLoader::class)) {
+            $formats[] = [__DIR__.'/../Fixtures/Resources/ConfigurationBundle/config.xml'];
+        }
+
+        return $formats;
     }
 
     /**
