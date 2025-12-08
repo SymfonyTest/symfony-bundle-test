@@ -29,6 +29,8 @@ jobs:
         include:
           - php: '8.4'
             symfony: '8.0.*'
+          - php: '8.5'
+            symfony: '8.0.*'
         exclude:
           - php: '7.2'
             symfony: '6.0.*'
