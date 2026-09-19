@@ -146,6 +146,7 @@ class KernelTempDirTest extends TestCase
         self::assertTrue($filesystem->exists($cacheDirectory));
 
         $kernel->shutdown();
+        $kernel->clearCache();
 
         self::assertFalse($filesystem->exists($cacheDirectory));
     }

@@ -68,6 +68,16 @@ class TestKernel extends Kernel
      */
     private $sharedCache = false;
 
+    /**
+     * @var array<int, string>
+     */
+    private static $staleDirectories = [];
+
+    /**
+     * @var bool
+     */
+    private static $shutdownRegistered = false;
+
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
@@ -111,7 +121,6 @@ class TestKernel extends Kernel
         }
 
         $this->sharedCache = $sharedCache;
-        $this->clearCache = !$sharedCache;
     }
 
     private function getCachePrefix(): string
@@ -146,7 +155,11 @@ class TestKernel extends Kernel
             $compilerPasses[] = [get_class($compilerPass[0]), $compilerPass[1], $compilerPass[2]];
         }
 
+        // Paratest compatibility
+        $token = getenv('TEST_TOKEN');
+
         return [
+            'token' => false === $token ? null : $token,
             'environment' => $this->environment,
             'debug' => $this->debug,
             'symfony' => Kernel::VERSION,
@@ -309,6 +322,19 @@ class TestKernel extends Kernel
         }
     }
 
+    public function boot(): void
+    {
+        if (!self::$shutdownRegistered) {
+            self::$shutdownRegistered = true;
+
+            register_shutdown_function(static function (): void {
+                self::clearStaleDirectories();
+            });
+        }
+
+        parent::boot();
+    }
+
     public function shutdown(): void
     {
         parent::shutdown();
@@ -317,17 +343,33 @@ class TestKernel extends Kernel
             return;
         }
 
-        $cacheDirectory = $this->getCacheDir();
-        $logDirectory = $this->getLogDir();
+        self::$staleDirectories[] = $this->getCacheDir();
+        self::$staleDirectories[] = $this->getLogDir();
+    }
+
+    public function clearCache(): void
+    {
+        self::$staleDirectories[] = $this->getCacheDir();
+        self::$staleDirectories[] = $this->getLogDir();
+
+        self::clearStaleDirectories();
+    }
+
+    public static function clearStaleDirectories(): void
+    {
+        if ([] === self::$staleDirectories) {
+            return;
+        }
+
+        $directories = array_unique(self::$staleDirectories);
+        self::$staleDirectories = [];
 
         $filesystem = new Filesystem();
 
-        if ($filesystem->exists($cacheDirectory)) {
-            $filesystem->remove($cacheDirectory);
-        }
-
-        if ($filesystem->exists($logDirectory)) {
-            $filesystem->remove($logDirectory);
+        foreach ($directories as $directory) {
+            if ($filesystem->exists($directory)) {
+                $filesystem->remove($directory);
+            }
         }
     }
 

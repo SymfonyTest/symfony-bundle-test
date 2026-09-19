@@ -116,8 +116,44 @@ class KernelSharedCacheTest extends TestCase
         $filesystem = new Filesystem();
 
         $kernel->shutdown();
+        $kernel->clearCache();
 
         self::assertFalse($filesystem->exists($cacheDirectory));
+    }
+
+    public function testTestToken(): void
+    {
+        $kernel = $this->createKernel();
+        $withoutToken = $kernel->getCacheDir();
+
+        putenv('TEST_TOKEN=1');
+
+        try {
+            $first = $this->createKernel()->getCacheDir();
+
+            putenv('TEST_TOKEN=2');
+
+            $second = $this->createKernel()->getCacheDir();
+        } finally {
+            putenv('TEST_TOKEN');
+        }
+
+        self::assertNotSame($withoutToken, $first);
+        self::assertNotSame($first, $second);
+    }
+
+    public function testTestTokenWithoutSharedCache(): void
+    {
+        $kernel = new TestKernel('test', true);
+        $withoutToken = $kernel->getCacheDir();
+
+        putenv('TEST_TOKEN=1');
+
+        try {
+            self::assertSame($withoutToken, $kernel->getCacheDir());
+        } finally {
+            putenv('TEST_TOKEN');
+        }
     }
 
     public function testSetSharedCacheAfterBoot(): void

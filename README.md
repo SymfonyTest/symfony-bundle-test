@@ -104,6 +104,26 @@ $kernel->setTempDir(__DIR__.'/../var/bundle-test');
 
 A `NyholmBundleTest` directory is created below the given path. Pass `null` to restore the default.
 
+## Share the cache between kernels
+
+By default every kernel gets its own cache directory. With `setSharedCache()` the directory is derived from everything that
+can change the container, so kernels with the same configuration reuse one compiled container:
+
+```php
+$kernel->setSharedCache(true);
+```
+
+## Control when the cache is removed
+
+`shutdown()` no longer removes the cache directory, it queues it. The queue is processed at the end of the process, or
+when `clearCache()` is called:
+
+```php
+$kernel->clearCache();
+```
+
+A directory is kept as long as the process runs, because a compiled container can still reference it after shutdown.
+
 ## Configure Github Actions
 
 You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
