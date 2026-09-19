@@ -37,7 +37,7 @@ class TestKernel extends Kernel
     private $testCachePrefix;
 
     /**
-     * @var string|null;
+     * @var string|null
      */
     private $testProjectDir;
 
@@ -57,6 +57,26 @@ class TestKernel extends Kernel
      * @var bool
      */
     private $clearCache = true;
+
+    /**
+     * @var string|null
+     */
+    private $tempDir;
+
+    /**
+     * @var bool
+     */
+    private $sharedCache = false;
+
+    /**
+     * @var array<int, string>
+     */
+    private static $staleDirectories = [];
+
+    /**
+     * @var bool
+     */
+    private static $shutdownRegistered = false;
 
     public function __construct(string $environment, bool $debug)
     {
@@ -88,12 +108,99 @@ class TestKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/'.$this->testCachePrefix;
+        return $this->getTempDir().'/'.$this->getCachePrefix();
+    }
+
+    /**
+     * @throws \LogicException
+     */
+    public function setSharedCache(bool $sharedCache): void
+    {
+        if ($this->booted) {
+            throw new \LogicException('The shared cache cannot be changed after the kernel has booted.');
+        }
+
+        $this->sharedCache = $sharedCache;
+    }
+
+    private function getCachePrefix(): string
+    {
+        if (!$this->sharedCache) {
+            return $this->testCachePrefix;
+        }
+
+        return 'cache'.sha1(serialize($this->getCacheKey()));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getCacheKey(): array
+    {
+        $configs = [];
+
+        foreach ($this->testConfigs as $config) {
+            $configs[] = is_string($config) ? $this->describeFile($config) : $this->describeCallable($config);
+        }
+
+        $routingFiles = [];
+
+        foreach ($this->testRoutingFiles as $routingFile) {
+            $routingFiles[] = $this->describeFile($routingFile);
+        }
+
+        $compilerPasses = [];
+
+        foreach ($this->testCompilerPasses as $compilerPass) {
+            $compilerPasses[] = [get_class($compilerPass[0]), $compilerPass[1], $compilerPass[2]];
+        }
+
+        // Paratest compatibility
+        $token = getenv('TEST_TOKEN');
+
+        return [
+            'token' => false === $token ? null : $token,
+            'environment' => $this->environment,
+            'debug' => $this->debug,
+            'symfony' => Kernel::VERSION,
+            'php' => PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION,
+            'projectDir' => $this->testProjectDir,
+            'bundles' => array_values(array_unique($this->testBundle)),
+            'configs' => $configs,
+            'routingFiles' => $routingFiles,
+            'compilerPasses' => $compilerPasses,
+        ];
+    }
+
+    /**
+     * @return array<int, string|null>
+     */
+    private function describeFile(string $file): array
+    {
+        return [$file, is_file($file) ? sha1_file($file) : null];
+    }
+
+    /**
+     * @param callable $callable
+     *
+     * @return array<int, string|int|false|null>
+     */
+    private function describeCallable($callable): array
+    {
+        $reflection = new \ReflectionFunction(\Closure::fromCallable($callable));
+        $file = $reflection->getFileName();
+
+        return [
+            $file,
+            $reflection->getStartLine(),
+            $reflection->getEndLine(),
+            false !== $file && is_file($file) ? sha1_file($file) : null,
+        ];
     }
 
     public function getLogDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/log';
+        return $this->getTempDir().'/log';
     }
 
     public function getProjectDir(): string
@@ -120,6 +227,40 @@ class TestKernel extends Kernel
         foreach ($this->testBundle as $bundle) {
             yield new $bundle();
         }
+    }
+
+    public function getTempDir(): string
+    {
+        if (null === $this->tempDir) {
+            $this->tempDir = realpath(sys_get_temp_dir()).'/NyholmBundleTest';
+        }
+
+        return $this->tempDir;
+    }
+
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    public function setTempDir(?string $tempDir): void
+    {
+        if ($this->booted) {
+            throw new \LogicException('The temporary directory cannot be changed after the kernel has booted.');
+        }
+
+        if (null === $tempDir) {
+            $this->tempDir = null;
+
+            return;
+        }
+
+        $tempDir = rtrim(trim($tempDir), '/'.DIRECTORY_SEPARATOR);
+
+        if ('' === $tempDir) {
+            throw new \InvalidArgumentException('The temporary directory cannot be empty. Pass null to restore the default.');
+        }
+
+        $this->tempDir = $tempDir.DIRECTORY_SEPARATOR.'NyholmBundleTest';
     }
 
     protected function buildContainer(): ContainerBuilder
@@ -181,6 +322,19 @@ class TestKernel extends Kernel
         }
     }
 
+    public function boot(): void
+    {
+        if (!self::$shutdownRegistered) {
+            self::$shutdownRegistered = true;
+
+            register_shutdown_function(static function (): void {
+                self::clearStaleDirectories();
+            });
+        }
+
+        parent::boot();
+    }
+
     public function shutdown(): void
     {
         parent::shutdown();
@@ -189,17 +343,33 @@ class TestKernel extends Kernel
             return;
         }
 
-        $cacheDirectory = $this->getCacheDir();
-        $logDirectory = $this->getLogDir();
+        self::$staleDirectories[] = $this->getCacheDir();
+        self::$staleDirectories[] = $this->getLogDir();
+    }
+
+    public function clearCache(): void
+    {
+        self::$staleDirectories[] = $this->getCacheDir();
+        self::$staleDirectories[] = $this->getLogDir();
+
+        self::clearStaleDirectories();
+    }
+
+    public static function clearStaleDirectories(): void
+    {
+        if ([] === self::$staleDirectories) {
+            return;
+        }
+
+        $directories = array_unique(self::$staleDirectories);
+        self::$staleDirectories = [];
 
         $filesystem = new Filesystem();
 
-        if ($filesystem->exists($cacheDirectory)) {
-            $filesystem->remove($cacheDirectory);
-        }
-
-        if ($filesystem->exists($logDirectory)) {
-            $filesystem->remove($logDirectory);
+        foreach ($directories as $directory) {
+            if ($filesystem->exists($directory)) {
+                $filesystem->remove($directory);
+            }
         }
     }
 

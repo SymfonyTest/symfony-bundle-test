@@ -15,10 +15,10 @@ will give you a good base for testing a Symfony bundle.
 
 Currently supported PHP and Symfony Versions.
 
-| Branch | PHP Version             | Symfony Version | Supported |
-|--------|-------------------------|-----------------|-----------|
-| master | 7.2+, 8.0+              | 5.4, 6.0+, 7.0+ | Yes       |
-| 2.x    | 7.2+, 8.0+              | 4.4, 6.3 - 6.4  | no        |
+| Branch | PHP Version | Symfony Version       | Supported |
+|--------|-------------|-----------------------|-----------|
+| master | 7.2+, 8.0+  | 5.4, 6.0+, 7.0+, 8.0+ | Yes       |
+| 2.x    | 7.2+, 8.0+  | 4.4, 6.3 - 6.4        | no        |
 
 Please always try to update to the latest version of this package before reporting an issue.
 
@@ -93,6 +93,37 @@ class BundleInitializationTest extends KernelTestCase
 
 ```
 
+## Control the temporary directory
+
+The kernel writes its cache and logs below `sys_get_temp_dir()/NyholmBundleTest`. Use `setTempDir()` to place them somewhere else,
+for example when several test suites run in parallel:
+
+```php
+$kernel->setTempDir(__DIR__.'/../var/bundle-test');
+```
+
+A `NyholmBundleTest` directory is created below the given path. Pass `null` to restore the default.
+
+## Share the cache between kernels
+
+By default every kernel gets its own cache directory. With `setSharedCache()` the directory is derived from everything that
+can change the container, so kernels with the same configuration reuse one compiled container:
+
+```php
+$kernel->setSharedCache(true);
+```
+
+## Control when the cache is removed
+
+`shutdown()` no longer removes the cache directory, it queues it. The queue is processed at the end of the process, or
+when `clearCache()` is called:
+
+```php
+$kernel->clearCache();
+```
+
+A directory is kept as long as the process runs, because a compiled container can still reference it after shutdown.
+
 ## Configure Github Actions
 
 You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
@@ -112,23 +143,33 @@ jobs:
     name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
     strategy:
       matrix:
-        operating-system: [ 'ubuntu-22.04', 'windows-2022' ]
-        php: [ '7.4', '8.0', '8.1', '8.2', '8.3' ]
-        symfony: ['5.4.*', '6.4.*', '7.0.*']
+        operating-system: [ 'ubuntu-24.04', 'windows-2025' ]
+        php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
+        symfony: ['5.4.*', '6.4.*', '7.4.*', '8.1.*']
         exclude:
         - php: '7.4'
           symfony: '6.4.*'
         - php: '8.0'
           symfony: '6.4.*'
         - php: '7.4'
-          symfony: '7.0.*'
+          symfony: '7.4.*'
         - php: '8.0'
-          symfony: '7.0.*'
+          symfony: '7.4.*'
         - php: '8.1'
-          symfony: '7.0.*'
+          symfony: '7.4.*'
+        - php: '7.4'
+          symfony: '8.1.*'
+        - php: '8.0'
+          symfony: '8.1.*'
+        - php: '8.1'
+          symfony: '8.1.*'
+        - php: '8.2'
+          symfony: '8.1.*'
+        - php: '8.3'
+          symfony: '8.1.*'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
@@ -139,7 +180,7 @@ jobs:
       - name: Download dependencies
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony }}
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v4
 
       - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
         run: ./vendor/bin/phpunit

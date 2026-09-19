@@ -1,0 +1,7 @@
+services:
+    test.resettable:
+        class: Nyholm\BundleTest\Tests\Fixtures\ResettableService
+        public: true
+        lazy: true
+        tags:
+            - { name: kernel.reset, method: reset }
