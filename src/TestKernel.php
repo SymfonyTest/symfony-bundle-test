@@ -58,6 +58,11 @@ class TestKernel extends Kernel
      */
     private $clearCache = true;
 
+    /**
+     * @var string|null
+     */
+    private $tempDir;
+
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
@@ -88,12 +93,12 @@ class TestKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/'.$this->testCachePrefix;
+        return $this->getTempDir().'/'.$this->testCachePrefix;
     }
 
     public function getLogDir(): string
     {
-        return realpath(sys_get_temp_dir()).'/NyholmBundleTest/log';
+        return $this->getTempDir().'/log';
     }
 
     public function getProjectDir(): string
@@ -120,6 +125,40 @@ class TestKernel extends Kernel
         foreach ($this->testBundle as $bundle) {
             yield new $bundle();
         }
+    }
+
+    public function getTempDir(): string
+    {
+        if (null === $this->tempDir) {
+            $this->tempDir = realpath(sys_get_temp_dir()).'/NyholmBundleTest';
+        }
+
+        return $this->tempDir;
+    }
+
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    public function setTempDir(?string $tempDir): void
+    {
+        if ($this->booted) {
+            throw new \LogicException('The temporary directory cannot be changed after the kernel has booted.');
+        }
+
+        if (null === $tempDir) {
+            $this->tempDir = null;
+
+            return;
+        }
+
+        $tempDir = rtrim(trim($tempDir), '/'.DIRECTORY_SEPARATOR);
+
+        if ('' === $tempDir) {
+            throw new \InvalidArgumentException('The temporary directory cannot be empty. Pass null to restore the default.');
+        }
+
+        $this->tempDir = $tempDir.DIRECTORY_SEPARATOR.'NyholmBundleTest';
     }
 
     protected function buildContainer(): ContainerBuilder

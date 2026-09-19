@@ -93,6 +93,17 @@ class BundleInitializationTest extends KernelTestCase
 
 ```
 
+## Control the temporary directory
+
+The kernel writes its cache and logs below `sys_get_temp_dir()/NyholmBundleTest`. Use `setTempDir()` to place them somewhere else,
+for example when several test suites run in parallel:
+
+```php
+$kernel->setTempDir(__DIR__.'/../var/bundle-test');
+```
+
+A `NyholmBundleTest` directory is created below the given path. Pass `null` to restore the default.
+
 ## Configure Github Actions
 
 You want ["Github actions"](https://docs.github.com/en/actions) to run against each currently supported LTS version of Symfony (since there would be only one per major version), plus the current if it's not an LTS too. There is no need for testing against version in between because Symfony follows [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
