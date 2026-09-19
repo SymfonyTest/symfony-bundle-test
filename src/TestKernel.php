@@ -63,6 +63,11 @@ class TestKernel extends Kernel
      */
     private $tempDir;
 
+    /**
+     * @var bool
+     */
+    private $sharedCache = false;
+
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
@@ -93,7 +98,91 @@ class TestKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return $this->getTempDir().'/'.$this->testCachePrefix;
+        return $this->getTempDir().'/'.$this->getCachePrefix();
+    }
+
+    /**
+     * @throws \LogicException
+     */
+    public function setSharedCache(bool $sharedCache): void
+    {
+        if ($this->booted) {
+            throw new \LogicException('The shared cache cannot be changed after the kernel has booted.');
+        }
+
+        $this->sharedCache = $sharedCache;
+        $this->clearCache = !$sharedCache;
+    }
+
+    private function getCachePrefix(): string
+    {
+        if (!$this->sharedCache) {
+            return $this->testCachePrefix;
+        }
+
+        return 'cache'.sha1(serialize($this->getCacheKey()));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getCacheKey(): array
+    {
+        $configs = [];
+
+        foreach ($this->testConfigs as $config) {
+            $configs[] = is_string($config) ? $this->describeFile($config) : $this->describeCallable($config);
+        }
+
+        $routingFiles = [];
+
+        foreach ($this->testRoutingFiles as $routingFile) {
+            $routingFiles[] = $this->describeFile($routingFile);
+        }
+
+        $compilerPasses = [];
+
+        foreach ($this->testCompilerPasses as $compilerPass) {
+            $compilerPasses[] = [get_class($compilerPass[0]), $compilerPass[1], $compilerPass[2]];
+        }
+
+        return [
+            'environment' => $this->environment,
+            'debug' => $this->debug,
+            'symfony' => Kernel::VERSION,
+            'php' => PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION,
+            'projectDir' => $this->testProjectDir,
+            'bundles' => array_values(array_unique($this->testBundle)),
+            'configs' => $configs,
+            'routingFiles' => $routingFiles,
+            'compilerPasses' => $compilerPasses,
+        ];
+    }
+
+    /**
+     * @return array<int, string|null>
+     */
+    private function describeFile(string $file): array
+    {
+        return [$file, is_file($file) ? sha1_file($file) : null];
+    }
+
+    /**
+     * @param callable $callable
+     *
+     * @return array<int, string|int|false|null>
+     */
+    private function describeCallable($callable): array
+    {
+        $reflection = new \ReflectionFunction(\Closure::fromCallable($callable));
+        $file = $reflection->getFileName();
+
+        return [
+            $file,
+            $reflection->getStartLine(),
+            $reflection->getEndLine(),
+            false !== $file && is_file($file) ? sha1_file($file) : null,
+        ];
     }
 
     public function getLogDir(): string
