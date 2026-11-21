@@ -37,7 +37,7 @@ class TestKernel extends Kernel
     private $testCachePrefix;
 
     /**
-     * @var string|null;
+     * @var string|null
      */
     private $testProjectDir;
 
