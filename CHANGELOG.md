@@ -2,6 +2,23 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## Unreleased
+
+### Added
+
+- Support for a custom temporary directory via `TestKernel::setTempDir`
+- Support for a cache directory shared between kernels via `TestKernel::setSharedCache`
+- Cleanup of the cache and log directory on demand via `TestKernel::clearCache`
+
+### Changed
+
+- Cleanup of the cache and log directory after the process instead of after kernel shutdown
+- Separate shared cache directories per `TEST_TOKEN`
+
+### Fixed
+
+- Lazy services failing after a kernel reboot
+
 ## 3.1.0
 
 ### Added
