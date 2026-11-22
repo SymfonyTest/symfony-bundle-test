@@ -168,6 +168,9 @@ jobs:
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.symfony }}"
 
+      - name: Allow versions with security advisories
+        run: composer config policy.advisories.block false
+
       - name: Get Composer Cache Directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
