@@ -2,6 +2,12 @@
 
 The change log describes what is "Added", "Removed", "Changed" or "Fixed" between each release.
 
+## Unreleased
+
+### Fixed
+
+- `TestKernel` failing to boot on Symfony 8.2+ when `symfony/validator` is not installed
+
 ## 3.1.0
 
 ### Added
