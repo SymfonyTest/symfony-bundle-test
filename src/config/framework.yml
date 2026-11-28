@@ -6,5 +6,3 @@ framework:
     test: ~
     form: false
     csrf_protection: false
-    validation:
-        enabled: false

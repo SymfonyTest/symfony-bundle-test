@@ -66,6 +66,16 @@ class TestKernel extends Kernel
 
         $this->addTestBundle(FrameworkBundle::class);
         $this->addTestConfig(__DIR__.'/config/framework.yml');
+
+        // Since Symfony 8.2, "framework.validation" is handled by a separate extension
+        // that only exists when symfony/validator is installed.
+        if (class_exists(\Symfony\Component\Validator\Validation::class)) {
+            $this->addTestConfig(static function (ContainerBuilder $container): void {
+                $container->loadFromExtension('framework', [
+                    'validation' => ['enabled' => false],
+                ]);
+            });
+        }
     }
 
     /**
